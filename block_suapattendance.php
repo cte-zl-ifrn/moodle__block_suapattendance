@@ -70,7 +70,7 @@ class block_suapattendance extends block_base {
         $presenca = 3;
         $porcentagem_presencas = $presenca / $total * 100;
         $porcentagem_faltas = $falta / $total * 100;
-        if (property_exists($this->config, 'faltas_ou_presencas')) {
+        if ($this->config != null && property_exists($this->config, 'faltas_ou_presencas')) {
             if ($this->config->faltas_ou_presencas == 'p') {
                 switch ($this->config->apresentacao) {
                     case 'p':
