@@ -101,6 +101,7 @@ class block_suapattendance extends block_base {
             $text .= "<div><a class='btn btn-primary'>Detalhar</a></div>";
     
             $this->content->text = $text;
+            $this->content->text .= $OUTPUT->render_from_template('block_suapattendance/widget');
         }
 
         return $this->content;
