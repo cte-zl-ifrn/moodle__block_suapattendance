@@ -54,14 +54,19 @@ class block_suapattendance extends block_base {
         $this->content->footer = '';
         // TODO: se não estiver configurado. se professor, pedir que configure. se aluno, pedir que aguarde o professor configurar
         $text = "
-            <table style='width: 100%;' border=1>
-            <tr>
-            <td>&nbsp</td>
-            <td>&nbsp</td>
-            <td>&nbsp</td>
-            <td>&nbsp</td>
-            <td>&nbsp</td>
-            </tr>
+            <table style='width: 100%; color: white;' border=1em>
+                <tr>
+                    <td style='background-color: CDEB8B'>&nbsp</td>
+                    <td style='background-color: FFCC99'>&nbsp</td>
+                    <td style='background-color: F8CECC'>&nbsp</td>
+                    <td style='background-color: F8CECC'>&nbsp</td>
+                    <td style='background-color: F8CECC'>&nbsp</td>
+                    <td style='background-color: CDEB8B'>&nbsp</td>
+                    <td style='background-color: FFCC99'>&nbsp</td>
+                    <td style='background-color: FFCC99'>&nbsp</td>
+                    <td style='background-color: F8CECC'>&nbsp</td>
+                    <td style='background-color: F8CECC'>&nbsp</td>
+                </tr>
             </table>
         ";
 
@@ -72,6 +77,7 @@ class block_suapattendance extends block_base {
         $porcentagem_faltas = $falta / $total * 100;
         if ($this->config != null && property_exists($this->config, 'faltas_ou_presencas')) {
             if ($this->config->faltas_ou_presencas == 'p') {
+
                 switch ($this->config->apresentacao) {
                     case 'p':
                         $text .= "$porcentagem_presencas% de presenças";
@@ -98,10 +104,10 @@ class block_suapattendance extends block_base {
                         break;
                 }
             }
-            $text .= "<div><a class='btn btn-primary'>Detalhar</a></div>";
-    
+            $text .= "<div><a class='btn btn-primary' href='{$CFG->wwwroot}/blocks/suapattendance/details.php'>Detalhar</a></div>";
+            
             $this->content->text = $text;
-            $this->content->text .= $OUTPUT->render_from_template('block_suapattendance/widget');
+            //$this->content->text = $OUTPUT->render_from_template('block_suapattendance/interface', ['name' => 'Lorem Ipsum', 'description' => 'Lorel Ipsum too']);
         }
 
         return $this->content;
@@ -116,7 +122,7 @@ class block_suapattendance extends block_base {
 
         // Load user defined title and make sure it's never empty.
         if (empty($this->config->title)) {
-            $this->title = "Um título qq";
+            $this->title = "Attendance";
             // $this->title = get_string('pluginname', 'block_suapattendance');
         } else {
             $this->title = $this->config->title;
