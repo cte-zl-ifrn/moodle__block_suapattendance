@@ -1,0 +1,69 @@
+<h1>{{course.fullname}}: Edit: SUAP Attendance</h1>
+<h2>- Configurar frequências do curso -</h2>
+
+<a class='btn btn-primary' href='adicionar-etapa.php?id={{course.id}}'>Adicionar etapa</a><br/>
+<div id="etapas">
+    {{#etapas}}
+    <div class="card">
+        <div class="card-header" id="etapa-heading{{id}}">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#etapa{{id}}" aria-expanded="true" aria-controls="etapa{{id}}">{{nome}}</button>
+                <a class='btn btn-primary' href='adicionar-periodo.php?id={{course.id}}&etapaid={{id}}'>Adicionar período</a>
+                <a class='btn btn-primary' href='adicionar-etapa.php?id={{course.id}}&etapaid={{id}}'>Editar etapa</a>
+                <a class='btn btn-primary' href='adicionar-etapa.php?id={{course.id}}&etapaid={{id}}&delete=1'>Apagar etapa</a>
+            </h5>
+        </div>
+        <div id="etapa{{id}}" class="collapse show" aria-labelledby="etapa-heading{{id}}" data-parent="#etapas">
+            <div class="card-body">
+
+                <div id="periodo_aula">
+                    {{#periodos_aula}}
+                    <div class="card">
+                        <div class="card-header" id="periodo_aula-heading{{id}}">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#periodo_aula{{id}}" aria-expanded="true" aria-controls="periodo_aula{{id}}">
+                                    Entre <i>{{data_inicio_formatada}}</i> e <i>{{data_fim_formatada}}<i>.
+                                </button>
+                                <a class='btn btn-primary' href='adicionar-aula.php?id={{course.id}}&periodoaula_id={{id}}'>Adicionar aula</a>
+                                <a class='btn btn-primary' href='adicionar-periodo.php?id={{course.id}}&etapaid={{etapaid}}&periodoaula_id={{id}}'>Editar periodo</a>
+                                <a class='btn btn-primary' href='adicionar-periodo.php?id={{course.id}}&etapaid={{etapaid}}&periodoaula_id={{id}}&delete=1'>Apagar periodo</a>
+                            </h5>
+                        </div>
+                        <div id="periodo_aula{{id}}" class="collapse show" aria-labelledby="periodo_aula-heading{{id}}" data-parent="#periodos_aulas">
+                            <div class="card-body">
+                                <p>{{conteudo}}</p>
+                            </div>
+                             <div id="aula{{id}}">
+                                {{#aulas}}
+                                    <div class="card">
+                                        <div class="card-header" id="aula-heading{{id}}">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link" data-toggle="collapse" data-target="#aula{{id}}" aria-expanded="true" aria-controls="aula{{id}}">
+                                                    <p>Aula: {{ordem}} | Quantidade: {{quantidade}}</p>
+                                                </button>
+                                                <a class='btn btn-primary' href='adicionar-componente.php?id={{course.id}}&aulaid={{id}}'>Adicionar componente</a>
+                                                <a class='btn btn-primary' href='adicionar-aula.php?id={{course.id}}&periodoaula_id={{periodoaula_id}}&aulaid={{id}}'>Editar aula</a>
+                                                <a class='btn btn-primary' href='adicionar-aula.php?id={{course.id}}&periodoaula_id={{periodoaula_id}}&aulaid={{id}}&delete=1'>Apagar aula</a>
+                                            </h5>
+                                        </div>
+                                        <div id="aula">
+                                            {{#componentes}}
+                                                <div class="card">
+                                                    <p>Componente: {{module.name}}</p>
+                                                    <a class='btn btn-primary p-1' href='adicionar-componente.php?id={{course.id}}&aulaid={{aulaid}}&componenteid={{id}}&delete=1'>Apagar componente</a>
+                                                </div>
+                                            {{/componentes}}
+                                        </div>
+                                    </div>
+                                {{/aulas}}
+                            </div>
+                        </div>
+                    </div>
+                    {{/periodos_aula}}
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {{/etapas}}
+</div>

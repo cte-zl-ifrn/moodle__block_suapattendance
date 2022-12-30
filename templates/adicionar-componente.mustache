@@ -1,0 +1,12 @@
+<div>
+    <div id="sections">
+        {{#sections}}
+            <div>
+                <h1 class="bg-secondary px-3 p-2">Section: {{name}}</h1>
+                {{#cms}}
+                    <h4 class="px-3"><a class='btn btn-primary' href="adicionar-componente.php?id={{course_id}}&aulaid={{aulaid}}&moduleid={{id}}">Adicionar</a> <k class="px-1">{{name}}</k></h4>
+                {{/cms}}    
+            </div>
+        {{/sections}}
+    </div>
+</div>

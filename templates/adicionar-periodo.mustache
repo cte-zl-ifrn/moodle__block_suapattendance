@@ -1,0 +1,16 @@
+<h1>Adicionar período de aula</h1>
+<form method="POST">
+    <label>Data de Início: </label>
+    <input type="date" name="data_inicio" placeholder="Inicio da etapa" value="{{periodo_aula.data_inicio}}"><br>
+    
+    <label>Data de Fim: </label>
+    <input type="date" name="data_fim" placeholder="Fim da etapa" value="{{periodo_aula.data_fim}}"><br>
+
+    <label>Conteudo: </label>
+    <input type="text" name="conteudo" placeholder="Conteúdo..." value="{{periodo_aula.conteudo}}"><br>
+
+    <label>Ordem: </label>
+    <input type="number" name="ordem_periodo" placeholder="Ordem do período" value="{{periodo_aula.ordem}}"><br>
+
+    <input type="submit" value="Salvar">
+</form>
