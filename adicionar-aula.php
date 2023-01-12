@@ -47,7 +47,7 @@ if ($_POST) {
   } else {
     // Estou incluindo
     $id_periodo = $_GET['periodoaula_id'];
-    $templatecontext = ['course_id' => $COURSE->id, 'periodoaula_id' => $_GET['periodoaula_id'], ];
+    $templatecontext = ['course_id' => $_GET['id'], 'periodoaula_id' => $_GET['periodoaula_id'], ];
   }  
   echo $OUTPUT->render_from_template('block_suapattendance/adicionar-aula', $templatecontext);
   echo $OUTPUT->footer();

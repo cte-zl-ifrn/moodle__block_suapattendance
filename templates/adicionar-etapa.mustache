@@ -1,10 +1,21 @@
-<h1>Adicionar Etapa</h1>
-<form method="POST">
-    <label>Nome da Etapa: </label>
-    <input type="text" name="nome" placeholder="Nome da etapa" value="{{etapa.nome}}"><br>
+<body>
+    <main class="d-flex text-center justify-content-center">
+        <div class="w-50 p-10 p-5">
+            <h1 class="pb-1 text-left">Adicionar Etapa</h1>
+            <form method="POST" class="mt-5">
+                <div class="text-left">
+                    <label for="nomeEtapa" class="h5">Nome da Etapa: </label><br/>
+                    <input id="nomeEtapa" class="form-control w-75" type="text" name="nome" placeholder="Nome da etapa" value="{{etapa.nome}}"><br>
 
-    <label>Ordem: </label>
-    <input type="number" name="ordem_etapa" placeholder="Ordem da etapa" value="{{etapa.ordem}}"><br>
+                    <label for="ordemEtapa" class="h5">Ordem: </label><br/>
+                    <input id="ordemEtapa" min="1" class="form-control w-75" type="number" name="ordem_etapa" placeholder="Ordem da etapa" value="{{etapa.ordem}}"><br>
 
-    <input type="submit" value="Salvar">
-</form>
+                    <div class="mt-4">
+                        <input type="submit" value="Salvar" class="btn btn-primary">
+                        <a class="btn border border-dark btn-outline-dark" href="/blocks/suapattendance/configurar-frequencia.php?id={{course_id}}">Cancelar</a>
+                    <div>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>

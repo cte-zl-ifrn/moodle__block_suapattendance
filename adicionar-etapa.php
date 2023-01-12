@@ -46,47 +46,8 @@ if ($_POST) {
     // echo "<pre>";var_dump($aula);die();
   } else {
     // Estou incluindo
-    $id_course = $_GET['courseid'];
-    $templatecontext = ['course_id' => $COURSE->id,];
+    $templatecontext = ['course_id' => $_GET['id'],];
   }  
   echo $OUTPUT->render_from_template('block_suapattendance/adicionar-etapa', $templatecontext);
   echo $OUTPUT->footer();
 }
-
-// echo $OUTPUT->header();
-
-// $templatecontext = [
-//   'course' => $COURSE,
-//   'user' => $USER,
-//   'course_id' => $COURSE->id,
-// ];
-
-// //echo "<pre>";var_dump($templatecontext['etapas']);//die();
-// echo $OUTPUT->render_from_template('block_suapattendance/adicionar-etapa', $templatecontext);
-
-// class etapa {
-//   public $courseid;
-//   public $nome;
-//   public $ordem;
-
-//   function __construct($courseid, $nome, $ordem) {
-//     $this->courseid = $courseid;
-//     $this->nome = $nome;
-//     $this->ordem = $ordem;
-//   }
-// }
-
-// if(filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING) != null) {
-
-//   $etapaNome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
-//   $etapaOrdem = filter_input(INPUT_POST, 'ordem_etapa', FILTER_DEFAULT);
-
-//   $etapa = new etapa($COURSE->id, $etapaNome, $etapaOrdem);
-//   $id_etapa = $DB->insert_record('suapattendance_etapa', $etapa, $returnid=true, $bulk=false);
-
-//   redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$COURSE->id");
-// }
-
-
-
-// echo $OUTPUT->footer();

@@ -8,12 +8,9 @@ if (!isset($_GET['id'])) {
 
 $PAGE->set_url(new moodle_url('/blocks/presence/componente.php'));
 $PAGE->set_context(\context_system::instance());
-$PAGE->set_title('Editar Presença');
+$PAGE->set_title('Adicionar componente');
 
 global $DB;
-
-echo $OUTPUT->header();
-
 
 $COURSE = get_course($_GET['id']);
 $coursecontext = context_course::instance($COURSE->id);
@@ -23,7 +20,6 @@ if (!user_has_role_assignment($USER->id, 3, $coursecontext->id) && !has_capabili
   echo $OUTPUT->footer();
   die();
 }
-
 
 $course_info = get_fast_modinfo($COURSE->id);
 $section_infos = [];
@@ -47,24 +43,25 @@ $section_infos = array_values($section_infos);
 // completion
 // visible
 
-$templatecontext = [
-    'course_id' => $COURSE->id,
-    'sections' => $section_infos,
-    'aulaid' => $_GET['aulaid'],
-];
-
-echo $OUTPUT->render_from_template('block_suapattendance/adicionar-componente', $templatecontext);
-
-if($_GET['moduleid'] != null) {
-
+if (isset($_GET['post'])) {
+  // Estou salvando
   $componente = new stdClass();
-  $componente->aulaid = $_GET['aulaid'];
-  $componente->moduleid = $_GET['moduleid'];
-  $componente->ordem = 1; // Mudar isso depois
+  $componente->aulaid = filter_input(INPUT_GET, 'aulaid', FILTER_VALIDATE_INT);
+  $componente->moduleid = filter_input(INPUT_GET, 'moduleid', FILTER_VALIDATE_INT);
+  $componente->ordem = 1; // Implementar como alterar a ordem !!!
 
   $id_componente = $DB->insert_record('suapattendance_componente', $componente, $returnid=true, $bulk=false);
   redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$COURSE->id");
 
-}
+} elseif (isset($_GET['delete']) && isset($_GET['componenteid'])) {
+  $DB->delete_records('suapattendance_componente', ['id'=>filter_input(INPUT_GET, 'componenteid', FILTER_VALIDATE_INT)]);
+  redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$COURSE->id");
+} else {
+  echo $OUTPUT->header();
+  // Estou incluindo
+  $id_aula = $_GET['aulaid'];
+  $templatecontext = [ 'course_id' => $_GET['id'], 'sections' => $section_infos, 'aulaid' => $_GET['aulaid'], ];
 
-echo $OUTPUT->footer();
+  echo $OUTPUT->render_from_template('block_suapattendance/adicionar-componente', $templatecontext);
+  echo $OUTPUT->footer();
+}

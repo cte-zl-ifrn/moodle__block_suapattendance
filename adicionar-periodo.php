@@ -52,7 +52,7 @@ if ($_POST) {
   } else {
     // Estou incluindo
     $id_etapa = $_GET['etapaid'];
-    $templatecontext = ['course_id' => $COURSE->id, 'etapaid' => $_GET['etapaid'],];
+    $templatecontext = ['course_id' => $_GET['id'], 'etapaid' => $_GET['etapaid'],];
   }  
   echo $OUTPUT->render_from_template('block_suapattendance/adicionar-periodo', $templatecontext);
   echo $OUTPUT->footer();
