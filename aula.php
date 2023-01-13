@@ -8,7 +8,7 @@ if (!isset($_GET['id'])) {
 
 $PAGE->set_url(new moodle_url('/blocks/presence/aula.php'));
 $PAGE->set_context(\context_system::instance());
-$PAGE->set_title('Adicionar aula');
+$PAGE->set_title('Aula');
 
 global $DB;
 
@@ -49,7 +49,6 @@ if ($_POST) {
     $id_periodo = $_GET['periodoaula_id'];
     $templatecontext = ['course_id' => $_GET['id'], 'periodoaula_id' => $_GET['periodoaula_id'], ];
   }  
-  echo $OUTPUT->render_from_template('block_suapattendance/adicionar-aula', $templatecontext);
+  echo $OUTPUT->render_from_template('block_suapattendance/aula', $templatecontext);
   echo $OUTPUT->footer();
 }
-

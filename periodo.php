@@ -5,9 +5,9 @@ if (!isset($_GET['id'])) {
 
 require_once(__DIR__ . '/../../config.php');
 
-$PAGE->set_url(new moodle_url('/blocks/presence/adicionar-periodo.php'));
+$PAGE->set_url(new moodle_url('/blocks/presence/periodo.php'));
 $PAGE->set_context(\context_system::instance());
-$PAGE->set_title('Adicionar período');
+$PAGE->set_title('Período');
 
 global $DB;
 
@@ -54,6 +54,6 @@ if ($_POST) {
     $id_etapa = $_GET['etapaid'];
     $templatecontext = ['course_id' => $_GET['id'], 'etapaid' => $_GET['etapaid'],];
   }  
-  echo $OUTPUT->render_from_template('block_suapattendance/adicionar-periodo', $templatecontext);
+  echo $OUTPUT->render_from_template('block_suapattendance/periodo', $templatecontext);
   echo $OUTPUT->footer();
 }

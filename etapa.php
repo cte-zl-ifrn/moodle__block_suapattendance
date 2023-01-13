@@ -6,9 +6,9 @@ if (!isset($_GET['id'])) {
   die('Informe o ID do curso');
 }
 
-$PAGE->set_url(new moodle_url('/blocks/presence/edit.php'));
+$PAGE->set_url(new moodle_url('/blocks/presence/etapa.php'));
 $PAGE->set_context(\context_system::instance());
-$PAGE->set_title('Adicionar Etapa');
+$PAGE->set_title('Etapa');
 
 global $DB;
 
@@ -48,6 +48,6 @@ if ($_POST) {
     // Estou incluindo
     $templatecontext = ['course_id' => $_GET['id'],];
   }  
-  echo $OUTPUT->render_from_template('block_suapattendance/adicionar-etapa', $templatecontext);
+  echo $OUTPUT->render_from_template('block_suapattendance/etapa', $templatecontext);
   echo $OUTPUT->footer();
 }

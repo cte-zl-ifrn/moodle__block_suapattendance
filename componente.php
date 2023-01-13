@@ -8,7 +8,7 @@ if (!isset($_GET['id'])) {
 
 $PAGE->set_url(new moodle_url('/blocks/presence/componente.php'));
 $PAGE->set_context(\context_system::instance());
-$PAGE->set_title('Adicionar componente');
+$PAGE->set_title('Componente');
 
 global $DB;
 
@@ -62,6 +62,6 @@ if (isset($_GET['post'])) {
   $id_aula = $_GET['aulaid'];
   $templatecontext = [ 'course_id' => $_GET['id'], 'sections' => $section_infos, 'aulaid' => $_GET['aulaid'], ];
 
-  echo $OUTPUT->render_from_template('block_suapattendance/adicionar-componente', $templatecontext);
+  echo $OUTPUT->render_from_template('block_suapattendance/componente', $templatecontext);
   echo $OUTPUT->footer();
 }
