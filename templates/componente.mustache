@@ -12,7 +12,7 @@
                         {{#cms}}
                         <div class="d-flex align-items-center">
                             <p class="px-3 mr-auto mt-2">{{name}}</p>
-                            <a class='btn btn-primary mr-3 mb-2' href="componente.php?id={{course_id}}&aulaid={{aulaid}}&moduleid={{id}}&post=true">Adicionar</a>
+                            {{^ja_adicionado}}<a class='btn btn-primary mr-3 mb-2' href="componente.php?id={{course_id}}&aulaid={{aulaid}}&moduleid={{id}}&post=true">Adicionar</a>{{/ja_adicionado}}
                         </div>
                         {{/cms}}    
                     </div>

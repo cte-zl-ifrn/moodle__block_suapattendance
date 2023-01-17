@@ -32,8 +32,28 @@ foreach ($course_info->get_section_info_all() as $sectionid => $section) {
     $i++;
 }
 
+$rows = array_values($DB->get_records_sql('
+    SELECT   moduleid
+    FROM     mdl_suapattendance_componente c 
+               INNER JOIN mdl_suapattendance_aula a ON (c.aulaid=a.id)
+                 INNER JOIN mdl_suapattendance_periodo_aula p ON (a.periodoaula_id=p.id)
+                   INNER JOIN mdl_suapattendance_etapa e ON (p.etapaid=e.id AND e.courseid=:courseid)
+;
+', ['courseid'=>$COURSE->id]));
+
+$modulos_adicionados = [];
+foreach ($rows as $key => $value) {
+  $modulos_adicionados[$value->moduleid] = $value->moduleid;
+}
+
+
+
+
 foreach ($course_info->cms as $cmid => $cm) {
-    $section_infos[$cm->section]->cms[] = $cm;
+  $module = new stdClass();
+  $module->name = $cm->name;
+  $module->ja_adicionado = in_array($cm->id, $modulos_adicionados);
+  $section_infos[$cm->section]->cms[] = $module;
 }
 
 $section_infos = array_values($section_infos);
