@@ -1,6 +1,8 @@
 <?php
 
 require_once(__DIR__ . '/../../config.php');
+require_once($CFG->dirroot . '/blocks/suapattendance/classes/form/moodleForm.php');
+
 $PAGE->set_url(new moodle_url('/blocks/presence/manage.php'));
 $PAGE->set_context(\context_system::instance());
 $PAGE->set_title('Detalhes Presença');
@@ -19,6 +21,10 @@ $templatecontext = [
     ],
 ];
 
+$mform = new atto_editor();
+
 echo $OUTPUT->render_from_template('block_suapattendance/details', $templatecontext);
+
+$mform->display();
 
 echo $OUTPUT->footer();
