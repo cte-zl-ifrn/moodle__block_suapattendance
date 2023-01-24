@@ -10,13 +10,15 @@ class atto_editor extends moodleform {
        
         $mform = $this->_form; // Don't forget the underscore! 
 
-        $mform->addElement('text', 'hora_aula', 'Hora Aula:', ['size' => '3', 'type' => 'number']);
+        $mform->addElement('text', 'hora_aula', 'Hora Aula:', ['size' => '3']);
         $mform->addRule('hora_aula', null, 'required', null, 'client');
         $mform->addRule('hora_aula', null, 'nonzero', null, 'client');
         $mform->addRule('hora_aula', null, 'numeric', null, 'client');
         $mform->setType('hora_aula', PARAM_INT);
-       // $mform->setDefault('hora_aula', get_config('tool_driprelease', 'activitiespersession'));
-       // $mform->addHelpButton('activitiespersession', 'activitiespersession', 'tool_driprelease');
+
+        //  $mform->registerRule('check_value', 'function', 'atto_editor::check_value');
+        //  $mform->addRule('hora_aula', "Error", 'check_value', null, 'client');
+
 
        $options = array(
         '1' => 'Etapa 1',
@@ -51,7 +53,7 @@ class atto_editor extends moodleform {
 
        $this->add_action_buttons();
 
-       $mform->disabledIf('submitbutton', 'hora_aula', 'lt', 1);
+       //$mform->disabledIf('submitbutton', 'hora_aula', 'lt', 1);
 
             
     }
@@ -61,9 +63,16 @@ class atto_editor extends moodleform {
         $errors = parent::validation($data, $files);
         $errors = [];
 
-        if ($data['hora_aula'] < 2) {
-            $errors['hora_aula'] = 'Error';
+        if ($data < 1) {
+            return $errors;
         }
-        return $errors;
+        return true;
+    }
+
+    function check_value($value) {
+        if ($value < 1) {
+            return false;
+        }
+        return true;
     }
 }
