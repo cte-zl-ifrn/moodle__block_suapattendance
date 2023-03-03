@@ -1,20 +1,24 @@
 <?php
-if (!isset($_GET['id'])) {
+
+require_once(__DIR__ . '/../../config.php');
+require_once($CFG->dirroot . '/blocks/suapattendance/classes/form/moodleFormAula.php');
+
+$PAGE->set_url(new moodle_url('/blocks/presence/aula.php'));
+$PAGE->set_context(\context_system::instance());
+$PAGE->set_title('Aula');
+
+if (isset($_GET['id'])) {
+  $COURSE = get_course($_GET['id']);
+} elseif (isset($SESSION->aula_courseid)) {
+  $COURSE = get_course($SESSION->aula_courseid);
+} else {
   die('Informe o ID do curso');
 }
 
-require_once(__DIR__ . '/../../config.php');
+global $DB, $SESSION;
 
-$PAGE->set_url(new moodle_url('/blocks/presence/periodo.php'));
-$PAGE->set_context(\context_system::instance());
-$PAGE->set_title('Período');
-
-global $DB;
-
-$COURSE = get_course($_GET['id']);
 $coursecontext = context_course::instance($COURSE->id);
 $course_info = get_fast_modinfo($COURSE->id);
-
 
 if (!user_has_role_assignment($USER->id, 3, $coursecontext->id) && !has_capability('block/suapattendance:addinstance', $coursecontext, 1)) {
   echo $OUTPUT->header();
@@ -23,36 +27,30 @@ if (!user_has_role_assignment($USER->id, 3, $coursecontext->id) && !has_capabili
   die();
 }
 
-
-if ($_POST) {
-  // Estou salvando
-  $aula = new stdClass();
-  $aula->etapaid = filter_input(INPUT_GET, 'etapaid', FILTER_VALIDATE_INT);
-  $aula->data_inicio = strtotime(filter_input(INPUT_POST, 'data_inicio', FILTER_DEFAULT));
-  $aula->data_fim = strtotime(filter_input(INPUT_POST, 'data_fim', FILTER_DEFAULT));
-  $aula->conteudo = filter_input(INPUT_POST, 'conteudo', FILTER_SANITIZE_STRING);
-  $aula->ordem = filter_input(INPUT_POST, 'ordem_periodo', FILTER_VALIDATE_INT);
-  if (isset($_GET['aulaid'])) {
-    $aula->id= filter_input(INPUT_GET, 'etapaid', FILTER_VALIDATE_INT);
-    $DB->update_record('suapattendance_aula', $aula);
-  } else {
-    $id_aula = $DB->insert_record('suapattendance_aula', $aula, $returnid=true, $bulk=false);
-  }
-  redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$COURSE->id");
-} elseif (isset($_GET['delete']) && isset($_GET['aulaid'])) {
+if (isset($_GET['delete']) && isset($_GET['aulaid'])) {
+  // echo "<pre>";var_dump($COURSE->id);die();
   $DB->delete_records('suapattendance_aula', ['id'=>filter_input(INPUT_GET, 'aulaid', FILTER_VALIDATE_INT)]);
-  redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$COURSE->id");
+  redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$COURSE->id", "Aula apagada com sucesso!");
 } else {
-  echo $OUTPUT->header();
-  if (isset($_GET['aulaid'])) {
-    // Estou editando
-    $aula = $DB->get_record('suapattendance_aula', ['id'=>$_GET['aulaid']]);
-    $templatecontext = ['course_id' => $COURSE->id, 'aula' => $aula];
+  $SESSION->aula_courseid = $COURSE->id;
+  $mform = new moodleFormAula();
+  if ($mform->is_cancelled()) {
+    redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$SESSION->aula_courseid", 'Você cancelou a ação!');
+    unset($SESSION['aula_courseid']);
   } else {
-    // Estou incluindo
-    $id_section = $_GET['topicoid'];
-    $templatecontext = ['course_id' => $_GET['id'],];
-  }  
-  echo $OUTPUT->render_from_template('block_suapattendance/aula', $templatecontext);
-  echo $OUTPUT->footer();
+    $fromform = $mform->get_data();
+    if (!$fromform) {
+      $SESSION->aula_courseid = $_GET['id'];
+    } else {
+      $fromform->courseid = $SESSION->aula_courseid;
+      $fromform->conteudo = $fromform->conteudo['text'];
+      // echo "<pre>";var_dump($fromform);die();
+
+      $id_aula = $DB->insert_record('suapattendance_aula', $fromform, $returnid=true, $bulk=false);
+      redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$SESSION->aula_courseid", 'Aula inserida com sucesso!');
+    }
+    echo $OUTPUT->header();
+    $mform->display();
+    echo $OUTPUT->footer();
+  }
 }

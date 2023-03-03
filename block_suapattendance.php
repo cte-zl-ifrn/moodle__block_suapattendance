@@ -118,8 +118,6 @@ class block_suapattendance extends block_base {
             
             $context_student = [
                 'detalhar' => "{$CFG->wwwroot}/blocks/suapattendance/details.php?id={$COURSE->id}",
-                'p' => $p,
-                'q' => $q,
             ];
 
             $context_teacher = [
