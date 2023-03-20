@@ -12,6 +12,8 @@ $PAGE->set_title('Componente');
 
 global $DB;
 
+echo $OUTPUT->header();
+
 $COURSE = get_course($_GET['id']);
 $coursecontext = context_course::instance($COURSE->id);
 
@@ -36,8 +38,6 @@ $rows = array_values($DB->get_records_sql('
     SELECT   moduleid
     FROM     mdl_suapattendance_componente c 
                INNER JOIN mdl_suapattendance_aula a ON (c.aulaid=a.id)
-                 INNER JOIN mdl_suapattendance_periodo_aula p ON (a.periodoaula_id=p.id)
-                   INNER JOIN mdl_suapattendance_etapa e ON (p.etapaid=e.id AND e.courseid=:courseid)
 ;
 ', ['courseid'=>$COURSE->id]));
 
@@ -45,9 +45,6 @@ $modulos_adicionados = [];
 foreach ($rows as $key => $value) {
   $modulos_adicionados[$value->moduleid] = $value->moduleid;
 }
-
-
-
 
 foreach ($course_info->cms as $cmid => $cm) {
   $module = new stdClass();
@@ -57,6 +54,14 @@ foreach ($course_info->cms as $cmid => $cm) {
 }
 
 $section_infos = array_values($section_infos);
+
+echo "<pre>";var_dump($section_infos[1]->cms);die();
+
+$templatecontext = [ 'course_id' => $SESSION->aula_courseid, 'cms' => $section_infos[1]->cms, ];
+
+echo $OUTPUT->render_from_template('block_suapattendance/componente', $templatecontext);
+
+echo $OUTPUT->footer();
 
 // $modulos = array_values($DB->get_records('course_modules', ['course'=>$COURSE->id]));
 // visibleoncoursepage
@@ -68,7 +73,7 @@ if (isset($_GET['post'])) {
   $componente = new stdClass();
   $componente->aulaid = filter_input(INPUT_GET, 'aulaid', FILTER_VALIDATE_INT);
   $componente->moduleid = filter_input(INPUT_GET, 'moduleid', FILTER_VALIDATE_INT);
-  $componente->ordem = 1; // Implementar como alterar a ordem !!!
+  $componente->quantidade_aulas = 10 /*filter_input(INPUT_GET, 'quantidade_aulas', FILTER_VALIDATE_INT)*/;
 
   $id_componente = $DB->insert_record('suapattendance_componente', $componente, $returnid=true, $bulk=false);
   redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$COURSE->id");

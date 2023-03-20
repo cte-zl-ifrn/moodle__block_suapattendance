@@ -1,23 +1,13 @@
 <body>
-    <main class="d-flex text-left justify-content-center">
-        <div class="w-50" class="text-align-center">
-            <div class="mb-3 d-flex align-items-center justify-content-between">
-                <h1 class="text-center">Selecione o Módulo</h1>
-                <a class="btn border border-dark btn-outline-dark" href="/blocks/suapattendance/configurar-frequencia.php?id={{course_id}}">Cancelar</a>
+    <div id="sections">
+        <div class="border border-secondary mb-3">
+            <h1 class="bg-light px-3 p-2 h2">Section: {{name}}</h1>
+            {{#cms}}
+            <div class="d-flex align-items-center">
+                <p class="px-3 mr-auto mt-2">{{name}}</p>
+                {{^ja_adicionado}}<a class='btn btn-primary mr-3 mb-2' href="componente.php?id={{course_id}}&moduleid={{id}}&post=true">Adicionar</a>{{/ja_adicionado}}
             </div>
-            <div id="sections">
-                {{#sections}}
-                    <div class="border border-secondary mb-3">
-                        <h1 class="bg-light px-3 p-2 h2">Section: {{name}}</h1>
-                        {{#cms}}
-                        <div class="d-flex align-items-center">
-                            <p class="px-3 mr-auto mt-2">{{name}}</p>
-                            {{^ja_adicionado}}<a class='btn btn-primary mr-3 mb-2' href="componente.php?id={{course_id}}&aulaid={{aulaid}}&moduleid={{id}}&post=true">Adicionar</a>{{/ja_adicionado}}
-                        </div>
-                        {{/cms}}    
-                    </div>
-                {{/sections}}
-            </div>
+            {{/cms}}    
         </div>
-    </main>
+    </div>
 </body>

@@ -28,7 +28,6 @@ if (!user_has_role_assignment($USER->id, 3, $coursecontext->id) && !has_capabili
 }
 
 if (isset($_GET['delete']) && isset($_GET['aulaid'])) {
-  // echo "<pre>";var_dump($COURSE->id);die();
   $DB->delete_records('suapattendance_aula', ['id'=>filter_input(INPUT_GET, 'aulaid', FILTER_VALIDATE_INT)]);
   redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$COURSE->id", "Aula apagada com sucesso!");
 } else {
@@ -36,21 +35,19 @@ if (isset($_GET['delete']) && isset($_GET['aulaid'])) {
   $mform = new moodleFormAula();
   if ($mform->is_cancelled()) {
     redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$SESSION->aula_courseid", 'Você cancelou a ação!');
-    unset($SESSION['aula_courseid']);
   } else {
     $fromform = $mform->get_data();
-    if (!$fromform) {
-      $SESSION->aula_courseid = $_GET['id'];
-    } else {
+    if ($fromform) {
       $fromform->courseid = $SESSION->aula_courseid;
       $fromform->conteudo = $fromform->conteudo['text'];
-      // echo "<pre>";var_dump($fromform);die();
-
+      
       $id_aula = $DB->insert_record('suapattendance_aula', $fromform, $returnid=true, $bulk=false);
-      redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$SESSION->aula_courseid", 'Aula inserida com sucesso!');
+      // redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$SESSION->aula_courseid", 'Aula inserida com sucesso!');
+      redirect("{$CFG->wwwroot}/blocks/suapattendance/componente.php?id=$SESSION->aula_courseid&sectionid=$fromform->sectionid", 'Aula inserida com sucesso!');
     }
     echo $OUTPUT->header();
     $mform->display();
     echo $OUTPUT->footer();
   }
 }
+// echo "<pre>";var_dump($fromform);die();

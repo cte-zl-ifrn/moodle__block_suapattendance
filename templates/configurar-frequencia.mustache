@@ -9,7 +9,7 @@
                 <h5 class="mb-0 d-flex align-items-center">
                     <a class="btn mr-auto p-1" data-toggle="collapse" data-target="#etapa{{id}}" aria-expanded="true" aria-controls="etapa{{id}}"><h2 style="font-size: 2em;" class="mb-0">Hora Aula: {{quantidade}}</h2></a>
                     <a class='p-2' href='etapa.php?id={{course.id}}&etapaid={{id}}'><img src="images/Icon-awesome-pencil-alt.svg" alt="edit icon"><e class="p-1"> Editar</e></a>
-                    <a class='p-2' href='aula.php?id={{course.id}}&aulaid={{id}}&delete=1'><img src="images/Icon-awesome-trash-alt.svg" alt="edit icon"><e class="p-1"> Excluir</e></a>
+                    <a class='p-2' href='aula.php?id={{course.id}}&aulaid={{id}}&delete=1'><img src="images/Icon-awesome-trash-alt.svg" alt="delete icon"><e class="p-1"> Excluir</e></a>
                 </h5>
             </div>
             <div class="card-body">
@@ -18,6 +18,14 @@
             <p><span class="h4">Data Fim: </span>{{data_fim}}</p>
             <p><span class="h4">ID da Seção: </span>{{sectionid}}</p>
             <p><span class="h4">Conteúdo: </span>{{conteudo}}</p>
+            <!-- {{#componentes}}
+                <div class="card-header border border-second mt-2 align-items-center" id="componente{{id}}">
+                    <h5 class="mb-0 d-flex justify-content-between">
+                        <span class="mt-2">{{module.name}}</span>
+                        <a class='p-2' href='componente.php?id={{course.id}}&aulaid={{aulaid}}&componenteid={{id}}&delete=1'><img src="images/Icon-awesome-trash-alt.svg" alt="edit icon"><e class="p-1"> Excluir</e></a>
+                    </h5>
+                </div>
+            {{/componentes}} -->
         </div>
         {{/aulas}}
     </div>
