@@ -2,10 +2,7 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-if (!isset($_GET['id'])) die('Informe o ID');
-if (isset($SESSION->aula_courseid)) unset($SESSION->aula_courseid);
-
-// echo "<pre>";var_dump($SESSION->aula_courseid);die();
+if (!isset($_GET['courseid'])) die('Informe o ID');
 
 $PAGE->set_url(new moodle_url('/blocks/presence/edit.php'));
 $PAGE->set_context(\context_system::instance());
@@ -15,7 +12,7 @@ global $DB, $SESSION;
 
 echo $OUTPUT->header();
 
-$COURSE = get_course($_GET['id']);
+$COURSE = get_course($_GET['courseid']);
 $coursecontext = context_course::instance($COURSE->id);
 $course_info = get_fast_modinfo($COURSE->id);
 

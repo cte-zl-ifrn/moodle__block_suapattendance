@@ -2,7 +2,7 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-if (!isset($_GET['id'])) {
+if (!isset($_GET['courseid'])) {
   die('Informe o ID do curso');
 }
 
@@ -14,7 +14,7 @@ global $DB;
 
 echo $OUTPUT->header();
 
-$COURSE = get_course($_GET['id']);
+$COURSE = get_course($_GET['courseid']);
 $coursecontext = context_course::instance($COURSE->id);
 
 if (!user_has_role_assignment($USER->id, 3, $coursecontext->id) && !has_capability('block/suapattendance:addinstance', $coursecontext, 1)) {
@@ -47,7 +47,10 @@ foreach ($rows as $key => $value) {
 }
 
 foreach ($course_info->cms as $cmid => $cm) {
+  // echo "<pre>"; echo json_encode((array)$cm);die();
+  //echo "<pre>";var_dump($cm);die();
   $module = new stdClass();
+  $module->cmdi = $cm->id;
   $module->name = $cm->name;
   $module->ja_adicionado = in_array($cm->id, $modulos_adicionados);
   $section_infos[$cm->section]->cms[] = $module;

@@ -117,11 +117,11 @@ class block_suapattendance extends block_base {
             $this->content->text = $text;
             
             $context_student = [
-                'detalhar' => "{$CFG->wwwroot}/blocks/suapattendance/details.php?id={$COURSE->id}",
+                'detalhar' => "{$CFG->wwwroot}/blocks/suapattendance/details.php?courseid={$COURSE->id}",
             ];
 
             $context_teacher = [
-                'editar' => "{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id={$COURSE->id}",
+                'editar' => "{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?courseid={$COURSE->id}",
             ];
 
             // $text .= "<a class='btn btn-primary' href='{$CFG->wwwroot}/blocks/suapattendance/edit.php?id={$COURSE->id}'>Edit</a>";

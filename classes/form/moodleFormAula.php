@@ -9,7 +9,10 @@ class moodleFormAula extends moodleform {
         global $CFG;
 
         $mform = $this->_form; // Don't forget the underscore!
-
+        
+        $mform->addElement('hidden', 'id');
+        $mform->addElement('hidden','courseid');
+        
         $mform->addElement('text', 'quantidade', 'Hora Aula:', ['size' => '3', 'type' => 'number']);
         $mform->addRule('quantidade', null, 'required', null, 'client');
         $mform->addRule('quantidade', null, 'nonzero', null, 'client');
@@ -17,6 +20,7 @@ class moodleFormAula extends moodleform {
         $mform->setType('quantidade', PARAM_INT);
         // $mform->setDefault('hora_aula', get_config('tool_driprelease', 'activitiespersession'));
         // $mform->addHelpButton('activitiespersession', 'activitiespersession', 'tool_driprelease');
+        
 
         // POST values:
         // hora_aula
@@ -41,7 +45,6 @@ class moodleFormAula extends moodleform {
 
         $mform->addElement('date_selector', 'data_fim', 'Data Fim:');
 
-        // $mform->addElement('hidden','courseid');
         // $mform->setType('courseid', PARAM_INT);
         // $mform->setDefault('courseid', $id);
         // $mform->setDefault('hidden', $SESSION->courseid);
