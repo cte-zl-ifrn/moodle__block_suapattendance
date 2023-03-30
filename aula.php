@@ -49,7 +49,7 @@ if (isset($_GET['delete']) && isset($_GET['id'])) {
       $DB->insert_record('suapattendance_aula', $fromform, $returnid=false, $bulk=false);
       $mensagem = "Aula inserida com sucesso!";
     }
-    redirect("{$CFG->wwwroot}/blocks/suapattendance/componente.php?courseid=$COURSE->id&sectionid=$fromform->sectionid", $mensagem);
+    redirect("{$CFG->wwwroot}/blocks/suapattendance/componente.php?courseid=$COURSE->id&sectionid=$fromform->sectionid&aulaid=$fromform->id", $mensagem);
   }
 } else {
   // Estou EDITANDO (novo ou existente)

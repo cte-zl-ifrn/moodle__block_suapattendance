@@ -48,9 +48,9 @@ foreach ($rows as $key => $value) {
 
 foreach ($course_info->cms as $cmid => $cm) {
   // echo "<pre>"; echo json_encode((array)$cm);die();
-  //echo "<pre>";var_dump($cm);die();
+  //  echo "<pre>";var_dump($cm);die();
   $module = new stdClass();
-  $module->cmdi = $cm->id;
+  $module->cmid = $cm->id;
   $module->name = $cm->name;
   $module->ja_adicionado = in_array($cm->id, $modulos_adicionados);
   $section_infos[$cm->section]->cms[] = $module;
@@ -58,38 +58,42 @@ foreach ($course_info->cms as $cmid => $cm) {
 
 $section_infos = array_values($section_infos);
 
-echo "<pre>";var_dump($section_infos[1]->cms);die();
-
-$templatecontext = [ 'course_id' => $SESSION->aula_courseid, 'cms' => $section_infos[1]->cms, ];
-
-echo $OUTPUT->render_from_template('block_suapattendance/componente', $templatecontext);
-
-echo $OUTPUT->footer();
+// echo "<pre>";var_dump($section_infos[1]->cms);die();
 
 // $modulos = array_values($DB->get_records('course_modules', ['course'=>$COURSE->id]));
 // visibleoncoursepage
 // completion
 // visible
 
-if (isset($_GET['post'])) {
-  // Estou salvando
-  $componente = new stdClass();
-  $componente->aulaid = filter_input(INPUT_GET, 'aulaid', FILTER_VALIDATE_INT);
-  $componente->moduleid = filter_input(INPUT_GET, 'moduleid', FILTER_VALIDATE_INT);
-  $componente->quantidade_aulas = 10 /*filter_input(INPUT_GET, 'quantidade_aulas', FILTER_VALIDATE_INT)*/;
-
-  $id_componente = $DB->insert_record('suapattendance_componente', $componente, $returnid=true, $bulk=false);
-  redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$COURSE->id");
-
-} elseif (isset($_GET['delete']) && isset($_GET['componenteid'])) {
-  $DB->delete_records('suapattendance_componente', ['id'=>filter_input(INPUT_GET, 'componenteid', FILTER_VALIDATE_INT)]);
-  redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$COURSE->id");
-} else {
-  echo $OUTPUT->header();
-  // Estou incluindo
-  $id_aula = $_GET['aulaid'];
-  $templatecontext = [ 'course_id' => $_GET['id'], 'sections' => $section_infos, 'aulaid' => $_GET['aulaid'], ];
-
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+  $templatecontext = [ 'course_id' => $_GET['courseid'], 'cms' => $section_infos[$_GET['sectionid']]->cms, ];
   echo $OUTPUT->render_from_template('block_suapattendance/componente', $templatecontext);
-  echo $OUTPUT->footer();
+} else {
+  // implentar o incremento para conseguir pegar os N componentes que vão vim do post - Lembrar de calcular antes o tamanho do array que vai templateContext e passar paro template para ser colocado como campo hidden no forms e ser pegado aqui de volta por post.
+  // Puxar do banco a % de presença do componente
 }
+
+echo $OUTPUT->footer();
+
+// if (isset($_GET['post'])) {
+//   // Estou salvando
+//   $componente = new stdClass();
+//   $componente->aulaid = filter_input(INPUT_GET, 'aulaid', FILTER_VALIDATE_INT);
+//   $componente->moduleid = filter_input(INPUT_GET, 'moduleid', FILTER_VALIDATE_INT);
+//   $componente->quantidade_aulas = 10 /*filter_input(INPUT_GET, 'quantidade_aulas', FILTER_VALIDATE_INT)*/;
+
+//   $id_componente = $DB->insert_record('suapattendance_componente', $componente, $returnid=true, $bulk=false);
+//   redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$COURSE->id");
+
+// } elseif (isset($_GET['delete']) && isset($_GET['componenteid'])) {
+//   $DB->delete_records('suapattendance_componente', ['id'=>filter_input(INPUT_GET, 'componenteid', FILTER_VALIDATE_INT)]);
+//   redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?id=$COURSE->id");
+// } else {
+//   echo $OUTPUT->header();
+//   // Estou incluindo
+//   $id_aula = $_GET['aulaid'];
+//   $templatecontext = [ 'course_id' => $_GET['id'], 'sections' => $section_infos, 'aulaid' => $_GET['aulaid'], ];
+
+//   echo $OUTPUT->render_from_template('block_suapattendance/componente', $templatecontext);
+//   echo $OUTPUT->footer();
+// }

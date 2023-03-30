@@ -1,4 +1,52 @@
 <body>
+    <div id="componentes">
+        <h1>Objeto de aprendizgem que irá valer presença: </h1>
+        <div>
+            <form method="POST">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Componente</th>
+                            <th>Percentual de presença</th>
+                        </tr>
+                    </thead>
+                {{#cms}}
+                    <tbody>
+                        <tr>
+                            <td><input name="componente-1" type="checkbox" class="checkbox-coluna-1" id="componente-{{cmid}}"/>{{name}}</td>
+                            <td><input type="number" class="checkbox-coluna-2" id="componente-percentual-presenca-{{id}}" min="1" max="100" disabled/>%</td>
+                        </tr>
+                    </tbody>
+                {{/cms}}
+                </table>
+            </div>
+            <input type="submit" value="Salvar"/>
+        </form>
+    </div>
+    <script src="templates/js/componente.js"></script>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <body>
     <div id="sections">
         <div class="border border-secondary mb-3">
             <h1 class="bg-light px-3 p-2 h2">Section: {{name}}</h1>
@@ -10,4 +58,4 @@
             {{/cms}}    
         </div>
     </div>
-</body>
+</body> -->
