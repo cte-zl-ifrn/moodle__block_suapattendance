@@ -58,6 +58,8 @@ foreach ($course_info->cms as $cmid => $cm) {
 
 $section_infos = array_values($section_infos);
 
+// echo "<pre>";var_dump(sizeof($section_infos[1]->cms));die();
+
 // echo "<pre>";var_dump($section_infos[1]->cms);die();
 
 // $modulos = array_values($DB->get_records('course_modules', ['course'=>$COURSE->id]));
@@ -69,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $templatecontext = [ 'course_id' => $_GET['courseid'], 'cms' => $section_infos[$_GET['sectionid']]->cms, ];
   echo $OUTPUT->render_from_template('block_suapattendance/componente', $templatecontext);
 } else {
+  echo "<pre>";var_dump($_POST);die(); 
   // implentar o incremento para conseguir pegar os N componentes que vão vim do post - Lembrar de calcular antes o tamanho do array que vai templateContext e passar paro template para ser colocado como campo hidden no forms e ser pegado aqui de volta por post.
   // Puxar do banco a % de presença do componente
 }

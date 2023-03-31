@@ -1,6 +1,6 @@
 <body>
     <div id="componentes">
-        <h1>Objeto de aprendizgem que irá valer presença: </h1>
+        <h1>Objeto de aprendizagem que irá valer presença: </h1>
         <div>
             <form method="POST">
                 <table>
@@ -10,14 +10,14 @@
                             <th>Percentual de presença</th>
                         </tr>
                     </thead>
-                {{#cms}}
                     <tbody>
+                {{#cms}}
                         <tr>
-                            <td><input name="componente-1" type="checkbox" class="checkbox-coluna-1" id="componente-{{cmid}}"/>{{name}}</td>
-                            <td><input type="number" class="checkbox-coluna-2" id="componente-percentual-presenca-{{id}}" min="1" max="100" disabled/>%</td>
+                            <td><input name="componente-{{cmid}}" type="checkbox" class="checkbox-coluna-1" id="componente-{{cmid}}"/>{{name}}</td>
+                            <td><input name="presenca-{{cmid}}" type="number" class="checkbox-coluna-2" id="componente-percentual-presenca-{{id}}" min="1" max="100" disabled/>%</td>
                         </tr>
-                    </tbody>
                 {{/cms}}
+                    </tbody>
                 </table>
             </div>
             <input type="submit" value="Salvar"/>
