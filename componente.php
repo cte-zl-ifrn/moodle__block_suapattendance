@@ -58,7 +58,7 @@ foreach ($course_info->cms as $cmid => $cm) {
 
 $section_infos = array_values($section_infos);
 
-// echo "<pre>";var_dump(sizeof($section_infos[1]->cms));die();
+// echo "<pre>";var_dump($section_infos[1]->cms);die();
 
 // echo "<pre>";var_dump($section_infos[1]->cms);die();
 
@@ -68,13 +68,49 @@ $section_infos = array_values($section_infos);
 // visible
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-  $templatecontext = [ 'course_id' => $_GET['courseid'], 'cms' => $section_infos[$_GET['sectionid']]->cms, ];
+
+  $cms = $section_infos[$_GET['sectionid']]->cms;
+  $componentes = array_values($DB->get_records('suapattendance_componente', ['aulaid'=>$_GET['aulaid']])); 
+
+  // fazer => ver se o componente já foi adicionado e, se sim, colocar no objeto a porcentagem se presença que aquele componente representa
+
+  echo "<pre>";var_dump($componentes);die(); 
+
+  foreach ($cms as $value) {
+    if ($value->ja_adicionado == true) {
+      $componente = $DB->get_record('suapattendance_componente', ['id'=>$value->cmid]);
+      $value->presenca = $componente->quantidade_aulas;
+    }
+  }
+
+  echo "<pre>";var_dump($cms);die();
+
+  $templatecontext = [ 'course_id' => $_GET['courseid'], 'cms' => $cms, ];
   echo $OUTPUT->render_from_template('block_suapattendance/componente', $templatecontext);
 } else {
-  echo "<pre>";var_dump($_POST);die(); 
-  // implentar o incremento para conseguir pegar os N componentes que vão vim do post - Lembrar de calcular antes o tamanho do array que vai templateContext e passar paro template para ser colocado como campo hidden no forms e ser pegado aqui de volta por post.
-  // Puxar do banco a % de presença do componente
+
+  foreach ($_POST as $cms => $val) {
+    // Estou salvando
+    if(substr($cms, 0, 10) == "componente") {
+      $componente = new stdClass();
+      $componente->aulaid = filter_input(INPUT_GET, 'aulaid', FILTER_VALIDATE_INT);
+      $componente->moduleid = substr($cms, 11);
+    } else {
+      $componente->quantidade_aulas = $val;
+      
+      if (isset($_GET['componenteid'])) {
+        $componente->id = filter_input(INPUT_GET, 'componenteid', FILTER_VALIDATE_INT);
+        $DB->update_record('suapattendance_componente', $componente);
+      } else {
+        $DB->insert_record('suapattendance_componente', $componente, $returnid=false, $bulk=false);
+      }
+    }
+  }
+  redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?courseid=$COURSE->id", "Presença configurada com sucesso!");
 }
+
+// implentar o incremento para conseguir pegar os N componentes que vão vim do post - Lembrar de calcular antes o tamanho do array que vai templateContext e passar paro template para ser colocado como campo hidden no forms e ser pegado aqui de volta por post.
+// Puxar do banco a % de presença do componente
 
 echo $OUTPUT->footer();
 
