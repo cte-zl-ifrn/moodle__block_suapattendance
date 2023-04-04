@@ -70,20 +70,16 @@ $section_infos = array_values($section_infos);
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
   $cms = $section_infos[$_GET['sectionid']]->cms;
-  $componentes = array_values($DB->get_records('suapattendance_componente', ['aulaid'=>$_GET['aulaid']])); 
-
-  // fazer => ver se o componente já foi adicionado e, se sim, colocar no objeto a porcentagem se presença que aquele componente representa
-
-  echo "<pre>";var_dump($componentes);die(); 
-
-  foreach ($cms as $value) {
-    if ($value->ja_adicionado == true) {
-      $componente = $DB->get_record('suapattendance_componente', ['id'=>$value->cmid]);
-      $value->presenca = $componente->quantidade_aulas;
+  $componentes = array_values($DB->get_records('suapattendance_componente', ['aulaid'=>$_GET['aulaid']]));
+  
+  foreach ($cms as $cm => $value) {
+    foreach ($componentes as $componente) {
+      if ($value->ja_adicionado == true && $value->cmid == $componente->moduleid) {
+        $value->presenca = $componente->quantidade_aulas;
+      }
     }
   }
-
-  echo "<pre>";var_dump($cms);die();
+  // echo "<pre>";var_dump($cms);die();
 
   $templatecontext = [ 'course_id' => $_GET['courseid'], 'cms' => $cms, ];
   echo $OUTPUT->render_from_template('block_suapattendance/componente', $templatecontext);
