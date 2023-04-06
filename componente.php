@@ -80,28 +80,72 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
   }
   // echo "<pre>";var_dump($cms);die();
-
+  
   $templatecontext = [ 'course_id' => $_GET['courseid'], 'cms' => $cms, ];
   echo $OUTPUT->render_from_template('block_suapattendance/componente', $templatecontext);
 } else {
+  
+  $componentes = array_values($DB->get_records('suapattendance_componente', ['aulaid'=>$_GET['aulaid']]));
+  
+  // echo "<pre>";var_dump($componentes);die();
 
-  foreach ($_POST as $cms => $val) {
-    // Estou salvando
-    if(substr($cms, 0, 10) == "componente") {
-      $componente = new stdClass();
-      $componente->aulaid = filter_input(INPUT_GET, 'aulaid', FILTER_VALIDATE_INT);
-      $componente->moduleid = substr($cms, 11);
-    } else {
-      $componente->quantidade_aulas = $val;
-      
-      if (isset($_GET['componenteid'])) {
-        $componente->id = filter_input(INPUT_GET, 'componenteid', FILTER_VALIDATE_INT);
-        $DB->update_record('suapattendance_componente', $componente);
-      } else {
-        $DB->insert_record('suapattendance_componente', $componente, $returnid=false, $bulk=false);
+  // Formata os dados recebidos por post e get
+  $i = 0;
+  foreach ($_POST as $post => $value) {
+    if(substr($post, 0, 10) == "componente") {
+      $cmid = substr($post, 11);
+      $cms[$cmid] = new stdClass();
+      $cms[$cmid]->aulaid = filter_input(INPUT_GET, 'aulaid', FILTER_VALIDATE_INT);
+      $cms[$cmid]->moduleid = substr($post, 11);
+    } elseif (substr($post, 0, 8) == "presenca" && substr($post, 9) == $cms[$i-1]->moduleid) {
+      $cms[$i-1]->quantidade_aulas = $value;
+    }
+    $i++;
+  }
+  
+  // Verifica se o componente já está adicionado ao banco, se não estiver, adciona ao banco e se tiver verifica se o percentual de presença permanece o mesmo.
+  // caso seja diferente, altera e atualiza isso no banco
+  foreach ($cms as $cm) {
+    $k = -1;
+    foreach ($componentes as $comp) {
+      if ($cm->moduleid == $comp->moduleid) {
+        $k = $comp->id;
+        if($cm->quantidade_aulas != $comp->quantidade_aulas) {
+          $cm->id = $comp->id;
+          $DB->update_record('suapattendance_componente', $cm);
+        }
+        break;
       }
     }
+    
+    if($k == -1 ){
+      $DB->insert_record('suapattendance_componente', $cm, $returnid=false, $bulk=false);
+    }
   }
+
+  // verifica se o componente que está no banco também está no post, caso não esteja, apaga no banco os que não estão (não funciona)
+  $i = 0;
+  foreach ($componentes as $comp) {
+    $k = -1;
+    foreach ($cms as $cm) {
+      if($comp->moduleid == $cm->moduleid) {
+        $k = $comp->moduleid;
+        break;
+      }
+    }
+    
+    if ($k == -1) {
+      $dels[$i] = $comp;
+      $i++;
+    }
+  }
+
+  if($i != 0) {
+    foreach ($dels as $del) {
+      $DB->delete_records('suapattendance_aula', ['id'=>$del->id]);
+    }
+  }
+
   redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?courseid=$COURSE->id", "Presença configurada com sucesso!");
 }
 
