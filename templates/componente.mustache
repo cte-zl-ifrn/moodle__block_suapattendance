@@ -1,6 +1,7 @@
 <body>
     <div id="componentes">
         <h1>Objeto de aprendizagem que irá valer presença: </h1>
+        <p>A soma do percentual presenças tem que resultar em 100%</p>
         <div>
             <form method="POST">
                 <table>
@@ -16,15 +17,18 @@
                             {{#ja_adicionado}}<td><input name="componente-{{cmid}}" type="checkbox" class="checkbox-coluna-1" id="componente-{{cmid}}" checked/>{{name}}</td>{{/ja_adicionado}}
                             {{^ja_adicionado}}<td><input name="componente-{{cmid}}" type="checkbox" class="checkbox-coluna-1" id="componente-{{cmid}}"/>{{name}}</td>{{/ja_adicionado}}
 
-                            {{#ja_adicionado}}<td><input name="presenca-{{cmid}}" type="number" class="checkbox-coluna-2" id="componente-percentual-presenca-{{cmid}}" min="1" max="100" value="{{presenca}}"/>%</td>{{/ja_adicionado}}
-                            {{^ja_adicionado}}<td><input name="presenca-{{cmid}}" type="number" class="checkbox-coluna-2" id="componente-percentual-presenca-{{cmid}}" min="1" max="100" disabled/>%</td>{{/ja_adicionado}}
+                            {{#ja_adicionado}}<td><input name="presenca-{{cmid}}" type="number" class="coluna-2 campo-numerico" id="componente-percentual-presenca-{{cmid}}" min="1" max="100" value="{{presenca}}" required/>%</td>{{/ja_adicionado}}
+                            {{^ja_adicionado}}<td><input name="presenca-{{cmid}}" type="number" class="coluna-2 campo-numerico" id="componente-percentual-presenca-{{cmid}}" min="1" max="100" disabled required/>%</td>{{/ja_adicionado}}
                         </tr>
                 {{/cms}}
                     </tbody>
                 </table>
             </div>
-            <input type="submit" value="Salvar"/>
+            <input type="submit" value="Salvar" id="send"/>
         </form>
+        {{! Adicionar botão de limpar aula para retornar um POST vazio e com isso apagar todos os componentes ligados àquela aula no banco }}
     </div>
+    <p id="alert"></p>
     <script src="templates/js/componente.js"></script>
+    <script src="templates/js/validacao.js"></script>
 </body>

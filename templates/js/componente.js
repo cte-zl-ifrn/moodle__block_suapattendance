@@ -1,13 +1,16 @@
-const checkboxesColuna1 = document.querySelectorAll('.checkbox-coluna-1');
+const checkboxes = document.querySelectorAll('.checkbox-coluna-1');
+const eventoChange = new Event('change');
 
-checkboxesColuna1.forEach(checkbox => {
+checkboxes.forEach(checkbox => {
   checkbox.addEventListener('click', () => {
-    const checkboxCorrespondente = checkbox.parentNode.parentNode.querySelector('.checkbox-coluna-2');
-    console.log(checkboxCorrespondente);
+    const numberCorrespondente = checkbox.parentNode.parentNode.querySelector('.coluna-2');
+    // console.log(numberCorrespondente);
     if (checkbox.checked) { 
-      checkboxCorrespondente.disabled = false;
+      numberCorrespondente.disabled = false;
     }else{
-      checkboxCorrespondente.disabled = true;
+      numberCorrespondente.disabled = true;
+      numberCorrespondente.value = "";
+      numberCorrespondente.dispatchEvent(eventoChange);
     }
   });
 });
