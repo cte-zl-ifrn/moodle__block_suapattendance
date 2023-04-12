@@ -26,9 +26,9 @@
             </div>
             <input type="submit" value="Salvar" id="send"/>
         </form>
-        {{! Adicionar botão de limpar aula para retornar um POST vazio e com isso apagar todos os componentes ligados àquela aula no banco }}
     </div>
-    <p id="alert"></p>
+    <form method="POST"><input type="submit" value="Resetar"/></form>
+    <a href="configurar-frequencia.php?courseid={{course_id}}" class="btn btn-secondary">Cancelar</a>
     <script src="templates/js/componente.js"></script>
     <script src="templates/js/validacao.js"></script>
 </body>

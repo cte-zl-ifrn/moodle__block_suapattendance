@@ -44,12 +44,11 @@ if (isset($_GET['delete']) && isset($_GET['id'])) {
     $fromform->conteudo = $fromform->conteudo['text'];
     if (isset($_POST['id']) && !empty($_POST['id'])) {
       $DB->update_record('suapattendance_aula', $fromform);
-      $mensagem = "Aula alterada com sucesso!";
+      redirect("{$CFG->wwwroot}/blocks/suapattendance/componente.php?courseid=$COURSE->id&sectionid=$fromform->sectionid&aulaid=$fromform->id", "Aula alterada com sucesso!");
     } else {
-      $DB->insert_record('suapattendance_aula', $fromform, $returnid=false, $bulk=false);
-      $mensagem = "Aula inserida com sucesso!";
+      $aulaid = $DB->insert_record('suapattendance_aula', $fromform, $returnid=true, $bulk=false);
+      redirect("{$CFG->wwwroot}/blocks/suapattendance/componente.php?courseid=$COURSE->id&sectionid=$fromform->sectionid&aulaid=$aulaid", "Aula inserida com sucesso!");
     }
-    redirect("{$CFG->wwwroot}/blocks/suapattendance/componente.php?courseid=$COURSE->id&sectionid=$fromform->sectionid&aulaid=$fromform->id", $mensagem);
   }
 } else {
   // Estou EDITANDO (novo ou existente)
@@ -63,6 +62,7 @@ if (isset($_GET['delete']) && isset($_GET['id'])) {
   }
   
   $aula->courseid = $COURSE->id;
+  $aula->conteudo = ["text"=>$aula->conteudo];
   $mform->set_data($aula);
   echo $OUTPUT->header();
   $mform->display();

@@ -4,7 +4,6 @@ const eventoChange = new Event('change');
 checkboxes.forEach(checkbox => {
   checkbox.addEventListener('click', () => {
     const numberCorrespondente = checkbox.parentNode.parentNode.querySelector('.coluna-2');
-    // console.log(numberCorrespondente);
     if (checkbox.checked) { 
       numberCorrespondente.disabled = false;
     }else{

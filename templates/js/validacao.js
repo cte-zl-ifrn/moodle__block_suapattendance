@@ -1,6 +1,5 @@
 const camposNumericos = document.querySelectorAll('.campo-numerico');
 const submit = document.getElementById('send');
-// const alert = document.getElementById('alert');
 
 camposNumericos.forEach(campo => {
   campo.addEventListener('change', () => {
@@ -11,8 +10,6 @@ camposNumericos.forEach(campo => {
     });
     if (soma !== 100) {
         submit.disabled = true;
-        // alert('A soma dos valores deve ser igual a 100');
-        // alert.innerHTML = "A soma do percentual presenças tem que resultar em 100%";
     } else {
         submit.disabled = false;
     }
