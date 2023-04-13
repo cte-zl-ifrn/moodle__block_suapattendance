@@ -56,13 +56,13 @@ if (isset($_GET['delete']) && isset($_GET['id'])) {
   if (isset($_GET['id'])) {
     // É alteração
     $aula = $DB->get_record('suapattendance_aula', ['id'=>$_GET['id']]);
+    $aula->conteudo = ["text"=>$aula->conteudo];
   } else {
     // É novo
     $aula = (object)[];
   }
   
   $aula->courseid = $COURSE->id;
-  $aula->conteudo = ["text"=>$aula->conteudo];
   $mform->set_data($aula);
   echo $OUTPUT->header();
   $mform->display();

@@ -11,7 +11,9 @@ class moodleFormAula extends moodleform {
         $mform = $this->_form; // Don't forget the underscore!
         
         $mform->addElement('hidden', 'id');
+        $mform->setType('id', PARAM_INT);
         $mform->addElement('hidden','courseid');
+        $mform->setType('courseid', PARAM_INT);
         
         $mform->addElement('text', 'quantidade', 'Hora Aula:', ['size' => '3', 'type' => 'number']);
         $mform->addRule('quantidade', null, 'required', null, 'client');
@@ -32,7 +34,9 @@ class moodleFormAula extends moodleform {
 
         $mform->addElement('date_selector', 'data_fim', 'Data Fim:');
 
-        $options = $DB->get_records_menu('course_sections', ['course'=>$_GET['courseid']], 'id', 'id, name');
+        $ifGet = isset($_GET['courseid']) ? ['course'=>$_GET['courseid']] : [];
+        
+        $options = $DB->get_records_menu('course_sections', $ifGet, 'id', 'id, name');
 
         $select = $mform->addElement('select', 'sectionid', 'Tópicos:', $options);
 
