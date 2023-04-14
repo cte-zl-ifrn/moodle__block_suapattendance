@@ -57,6 +57,7 @@ if (isset($_GET['delete']) && isset($_GET['id'])) {
     // É alteração
     $aula = $DB->get_record('suapattendance_aula', ['id'=>$_GET['id']]);
     $aula->conteudo = ["text"=>$aula->conteudo];
+    $aula->isEdit = 1;
   } else {
     // É novo
     $aula = (object)[];

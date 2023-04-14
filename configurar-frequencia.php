@@ -22,38 +22,19 @@ if (!user_has_role_assignment($USER->id, 3, $coursecontext->id) && !has_capabili
   die();
 }
 
-// $etapas = array_values($DB->get_records('suapattendance_etapa', ['courseid'=>$COURSE->id], 'ordem'));
-// $array_test = [];
+$aulas = array_values($DB->get_records('suapattendance_aula', null/*['courseid'=>$COURSE->id]*/)); // Impletar retorno de aulas baseadas no curso, pois só tem o campo de curso em section
 
-// foreach ($etapas as $etapa) {
-//     $etapa->periodos_aula = array_values($DB->get_records('suapattendance_periodo_aula', ['etapaid'=>$etapa->id], 'ordem'));
-//   foreach ($etapa->periodos_aula as $periodo_aula) {
-//     $periodo_aula->data_inicio_formatada = userdate($periodo_aula->data_inicio);
-//     $periodo_aula->data_fim_formatada = userdate($periodo_aula->data_fim);
-//     $periodo_aula->aulas = array_values($DB->get_records('suapattendance_aula', ['periodoaula_id'=>$periodo_aula->id], 'ordem'));
-//     foreach ($periodo_aula->aulas as $aula) {
-//       $aula->componentes = array_values($DB->get_records('suapattendance_componente', ['aulaid'=>$aula->id], 'ordem'));
-//       foreach ($aula->componentes as $componente) {
-//         foreach ($course_info->cms as $cm) {
-//             if(intval($componente->moduleid) == intval($cm->id)) {
-//                 $componente->module = $cm;
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
+foreach ($aulas as $aula) {
+  $aula->data_inicio = date('d/m/Y', $aula->data_inicio);
+  $aula->data_fim = date('d/m/Y', $aula->data_fim);
+}
 
-
-$aulas = array_values($DB->get_records('suapattendance_aula', null/*['courseid'=>$COURSE->id]*/)); // Impletar retorno de aulas baseadas no curso
-// $aulas->componentes = array_values($DB->get_records('suapattendance_componente', ['aulaid'=>$aula->id], 'ordem'));
-
-  $templatecontext = [
-    'course' => $COURSE,
-    'user' => $USER,
-    'course_id' => $COURSE->id,
-    'aulas' => $aulas,
-  ];
+$templatecontext = [
+  'course' => $COURSE,
+  'user' => $USER,
+  'course_id' => $COURSE->id,
+  'aulas' => $aulas,
+];
 
 echo $OUTPUT->render_from_template('block_suapattendance/configurar-frequencia', $templatecontext);
 

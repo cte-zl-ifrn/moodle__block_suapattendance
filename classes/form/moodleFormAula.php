@@ -12,9 +12,13 @@ class moodleFormAula extends moodleform {
         
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
+        
         $mform->addElement('hidden','courseid');
         $mform->setType('courseid', PARAM_INT);
         
+        $mform->addElement('hidden','isEdit');
+        $mform->setType('isEdit', PARAM_INT);
+
         $mform->addElement('text', 'quantidade', 'Hora Aula:', ['size' => '3', 'type' => 'number']);
         $mform->addRule('quantidade', null, 'required', null, 'client');
         $mform->addRule('quantidade', null, 'nonzero', null, 'client');
