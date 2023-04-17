@@ -51,6 +51,21 @@ class moodleFormAula extends moodleform {
 
         //  $mform->disabledIf('submitbutton', 'hora_aula', 'lt', 1);
 
+        $mform->addElement('html',
+        '<script type="text/javascript">
+            if (document.getElementsByName("isEdit")[0].value == "1") {    
+                const topicos = document.getElementById("id_sectionid");
+                const DBValue = topicos.value;
+                
+                topicos.addEventListener("change", function() {
+                if (topicos.value !== DBValue) {
+                    alert("Se alterar o tópico, os componentes anteriormente marcados para contabilizar frequência relacionados a esta aula serão apagados");
+                }
+                });
+            }
+        </script>'); // ver um forma de linkar um arquivo js aqui em vez de colocar o código bruto
+
+
     }
     //Custom validation should be added here
     function validation($data, $files) {

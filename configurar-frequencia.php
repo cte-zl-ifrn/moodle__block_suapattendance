@@ -22,11 +22,22 @@ if (!user_has_role_assignment($USER->id, 3, $coursecontext->id) && !has_capabili
   die();
 }
 
-$aulas = array_values($DB->get_records('suapattendance_aula', null/*['courseid'=>$COURSE->id]*/)); // Impletar retorno de aulas baseadas no curso, pois só tem o campo de curso em section
+// $aulas = array_values($DB->get_records('suapattendance_aula', null/*['courseid'=>$COURSE->id]*/)); // Impletar retorno de aulas baseadas no curso, pois só tem o campo de curso em section
+
+$aulas = array_values($DB->get_records_sql("
+  SELECT a.* 
+  FROM mdl_suapattendance_aula a 
+      INNER JOIN mdl_course_sections s ON (s.id = a.sectionid) 
+      WHERE s.course = ?
+", [$COURSE->id]));
+
+// echo "<pre>"; var_dump($aulas); die();
 
 foreach ($aulas as $aula) {
   $aula->data_inicio = date('d/m/Y', $aula->data_inicio);
   $aula->data_fim = date('d/m/Y', $aula->data_fim);
+  $section = $DB->get_record('course_sections', ['id' => $aula->sectionid]);
+  $aula->sectionid = $section->name;
 }
 
 $templatecontext = [

@@ -1,12 +1,10 @@
-if (document.getElementById("id_isEdit").value == 1) {
-    const sections = document.getElementById("id_sectionid");
-    const DBValue = sections.value;
-
-    sections.addEventListener("change", function() {
-    if (sections.value !== DBValue) {
-        alert("Você está alterando a aula!");
+if (document.getElementsByName("isEdit")[0].value == "1") {    
+    const topicos = document.getElementById("id_sectionid");
+    const DBValue = topicos.value;
+    
+    topicos.addEventListener("change", function() {
+    if (topicos.value !== DBValue) {
+        alert("Se alterar o tópico, os componentes anteriormente marcados para contabilizar frequência relacionados a esta aula serão apagados");
     }
     });
 }
-
-// console.log("DEU CERTO!!!!!!!!!!!")

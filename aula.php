@@ -43,6 +43,15 @@ if (isset($_GET['delete']) && isset($_GET['id'])) {
     $fromform->courseid = $COURSE->id;
     $fromform->conteudo = $fromform->conteudo['text'];
     if (isset($_POST['id']) && !empty($_POST['id'])) {
+      $aula = $DB->get_record('suapattendance_aula', ['id'=>$_POST['id']]);
+      if ($aula->sectionid != $_POST['sectionid']) {
+        $componentes = $DB->get_records('suapattendance_componente', ['aulaid'=>$_POST['id']]);
+        if ($componentes) {
+          foreach($componentes as $comp) {
+            $DB->delete_records('suapattendance_componente', ['id'=>$comp->id]);
+          }
+        }
+      }
       $DB->update_record('suapattendance_aula', $fromform);
       redirect("{$CFG->wwwroot}/blocks/suapattendance/componente.php?courseid=$COURSE->id&sectionid=$fromform->sectionid&aulaid=$fromform->id", "Aula alterada com sucesso!");
     } else {
