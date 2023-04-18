@@ -1,23 +1,24 @@
 <body>
     <h1>Configurar frequências do curso</h1>
     <h2 class="mb-5">Curso: {{course.fullname}}</h2>
-    <a class='class="btn btn-outline-primary" btn-lg btn-block border border-primary mt-3 mb-3' data-mdb-ripple-color="dark" href='aula.php?courseid={{course.id}}'><img src="images/Icon-feather-plus-square.svg" alt="add icon"><e class="p-2"> Adicionar aula</e></a>
-    <div id="aulas">
+    <a class='btn-lg btn-block border border-primary mt-3 mb-3' data-mdb-ripple-color="dark" href='aula.php?courseid={{course.id}}'><img src="images/Icon-feather-plus-square.svg" alt="add icon"><span class="p-2"> Adicionar aula</span></a>
+    <div class="mt-3">
         {{#aulas}}
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-header" id="etapa-heading{{id}}">
                 <h5 class="mb-0 d-flex align-items-center">
                     <a class="btn mr-auto p-1" data-toggle="collapse" data-target="#etapa{{id}}" aria-expanded="true" aria-controls="etapa{{id}}"><h2 style="font-size: 2em;" class="mb-0">Hora Aula: {{quantidade}}</h2></a>
-                    <a class='p-2' href='aula.php?courseid={{course.id}}&id={{id}}'><img src="images/Icon-awesome-pencil-alt.svg" alt="edit icon"><e class="p-1"> Editar</e></a>
-                    <a class='p-2' href='aula.php?courseid={{course.id}}&id={{id}}&delete=1'><img src="images/Icon-awesome-trash-alt.svg" alt="delete icon"><e class="p-1"> Excluir</e></a>
+                    <a class='p-2' href='aula.php?courseid={{course.id}}&id={{id}}'><img src="images/Icon-awesome-pencil-alt.svg" alt="edit icon"><span class="p-1"> Editar</span></a>
+                    <a class='p-2' href='aula.php?courseid={{course.id}}&id={{id}}&delete=1'><img src="images/Icon-awesome-trash-alt.svg" alt="delete icon"><span class="p-1"> Excluir</span></a>
                 </h5>
             </div>
             <div class="card-body">
-            <p><span class="h4">Etapa: </span>{{etapa}}</p>
-            <p><span class="h4">Data Início: </span>{{data_inicio}}</p>
-            <p><span class="h4">Data Fim: </span>{{data_fim}}</p>
-            <p><span class="h4">ID da Seção: </span>{{sectionid}}</p>
-            <p><span class="h4">Conteúdo: </span>{{{conteudo}}}</p>
+                <p><span class="h4">Etapa: </span>{{etapa}}</p>
+                <p><span class="h4">Data Início: </span>{{data_inicio}}</p>
+                <p><span class="h4">Data Fim: </span>{{data_fim}}</p>
+                <p><span class="h4">ID da Seção: </span>{{sectionid}}</p>
+                <p><span class="h4">Conteúdo: </span>{{{conteudo}}}</p>
+            </div>
         </div>
         {{/aulas}}
     </div>

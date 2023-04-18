@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
   }
 
-  if ($total == 100) {
+  if ($total == 100 || $cms == []) {
     // Compara os dados vindo do banco com o que veio do POST e se ouver alteração, altera. Além disso, se o objeto já existir no banco, retira dos arrays.
     // Sobrando do array que veio do banco, os componentes que precisam ser apagados e do array que veio do post os componentes que precisam ser adicionados
     foreach ($componentes as $comp => $value) {

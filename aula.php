@@ -33,6 +33,12 @@ if (!user_has_role_assignment($USER->id, 3, $coursecontext->id) && !has_capabili
 if (isset($_GET['delete']) && isset($_GET['id'])) {
   // Estou APAGANDO
   $DB->delete_records('suapattendance_aula', ['id'=>filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT)]);
+  $componentes = $DB->get_records('suapattendance_componente', ['aulaid'=>$_GET['id']]);
+  if ($componentes) {
+    foreach($componentes as $comp) {
+      $DB->delete_records('suapattendance_componente', ['id'=>$comp->id]);
+    }
+  }
   redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?courseid=$COURSE->id", "Aula apagada com sucesso!");
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // Estou SALVANDO (novo ou existente)
