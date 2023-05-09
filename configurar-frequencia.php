@@ -34,10 +34,11 @@ foreach ($aulas as $aula) {
   $aula->data_inicio = date('d/m/Y', $aula->data_inicio);
   $aula->data_fim = date('d/m/Y', $aula->data_fim);
   $section = $DB->get_record('course_sections', ['id' => $aula->sectionid]);
-  $aula->sectionid = $section->name;
+  $aula->sectionname = $section->name;
 }
 
 $templatecontext = [
+  'course_url' => "{$CFG->wwwroot}/course/view.php?id={$COURSE->id}",
   'course' => $COURSE,
   'user' => $USER,
   'course_id' => $COURSE->id,
