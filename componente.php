@@ -12,8 +12,6 @@ $PAGE->set_title('Componente');
 
 global $DB;
 
-echo $OUTPUT->header();
-
 $COURSE = get_course($_GET['courseid']);
 $coursecontext = context_course::instance($COURSE->id);
 
@@ -46,6 +44,10 @@ foreach ($rows as $key => $value) {
   $modulos_adicionados[$value->moduleid] = $value->moduleid;
 }
 
+$sections = array_values($DB->get_records('course_sections', ['course'=>$_GET['courseid']]));
+
+// echo "<pre>";var_dump($course_info->cms);die();
+
 foreach ($course_info->cms as $cmid => $cm) {
   // echo "<pre>"; echo json_encode((array)$cm);die();
   //  echo "<pre>";var_dump($cm);die();
@@ -53,10 +55,14 @@ foreach ($course_info->cms as $cmid => $cm) {
   $module->cmid = $cm->id;
   $module->name = $cm->name;
   $module->ja_adicionado = in_array($cm->id, $modulos_adicionados);
-  $section_infos[$cm->section]->cms[] = $module;
+  // echo "<pre>";var_dump($cm->section); echo "</pre>";
+  $section_infos[$sections[$cm->section]->id]->cms[] = $module; // Não funciona como esperado
 }
 
 $section_infos = array_values($section_infos);
+
+// echo "<pre>";var_dump($cm);die();
+// echo "<pre>";var_dump($section_infos[14]);die();
 
 // $modulos = array_values($DB->get_records('course_modules', ['course'=>$COURSE->id]));
 // visibleoncoursepage
@@ -75,9 +81,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       }
     }
   }
-  
   $templatecontext = [ 'course_id' => $_GET['courseid'], 'cms' => $cms, ];
+  echo $OUTPUT->header();
   echo $OUTPUT->render_from_template('block_suapattendance/componente', $templatecontext);
+  echo $OUTPUT->footer();
 } else {
 
   $componentes = array_values($DB->get_records('suapattendance_componente', ['aulaid'=>$_GET['aulaid']]));
@@ -128,8 +135,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   } else {
     redirect("{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?courseid=$COURSE->id");
   }
-
-  
 }
-
-echo $OUTPUT->footer();

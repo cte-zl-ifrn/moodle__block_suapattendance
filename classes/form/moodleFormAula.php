@@ -39,10 +39,22 @@ class moodleFormAula extends moodleform {
         $mform->addElement('date_selector', 'data_fim', 'Data Fim:');
 
         $ifGet = isset($_GET['courseid']) ? ['course'=>$_GET['courseid']] : [];
-        
-        $options = $DB->get_records_menu('course_sections', $ifGet, 'id', 'id, name');
 
-        $select = $mform->addElement('select', 'sectionid', 'Tópicos:', $options);
+        $options = array_values($DB->get_records('course_sections', $ifGet));
+
+        // Se a seção não tiver nome, coloca o nome manualmente.
+        $i = 0;
+        foreach ($options as $option => $value) {
+            if($value->section == 0 && is_null($value->name)) {
+                $value->name = "Apresentação";
+            } else if (is_null($value->name)) {
+                 $value->name = "Topic $i";
+            }
+            $i++;
+            $optionsInterface[$value->id] = $value->name;
+        }
+
+        $select = $mform->addElement('select', 'sectionid', 'Tópicos:', $optionsInterface);
 
         $mform->addElement('editor', 'conteudo', 'Conteúdo:', null, null);
         $mform->setType('conteudo', PARAM_RAW); // Set type of element.

@@ -33,8 +33,8 @@ $aulas = array_values($DB->get_records_sql("
 foreach ($aulas as $aula) {
   $aula->data_inicio = date('d/m/Y', $aula->data_inicio);
   $aula->data_fim = date('d/m/Y', $aula->data_fim);
-  $section = $DB->get_record('course_sections', ['id' => $aula->sectionid]);
-  $aula->sectionname = $section->name;
+  // $section = $DB->get_record('course_sections', ['id' => $aula->sectionid]);
+  // $aula->sectionname = $section->name;
 }
 
 $templatecontext = [
