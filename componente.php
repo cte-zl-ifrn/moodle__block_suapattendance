@@ -22,56 +22,32 @@ if (!user_has_role_assignment($USER->id, 3, $coursecontext->id) && !has_capabili
 }
 
 $course_info = get_fast_modinfo($COURSE->id);
-$section_infos = [];
-$i = 0;
-foreach ($course_info->get_section_info_all() as $sectionid => $section) {
-    $section_name = $section->name ? $section->name : "Tópico $i";
-    $section->cms = [];
-    $section->name = $section_name;
-    $section_infos[$section->id] = $section;
-    $i++;
-}
-
-$rows = array_values($DB->get_records_sql('
-    SELECT   moduleid
-    FROM     mdl_suapattendance_componente c 
-               INNER JOIN mdl_suapattendance_aula a ON (c.aulaid=a.id)
-;
-', ['courseid'=>$COURSE->id]));
-
-$modulos_adicionados = [];
-foreach ($rows as $key => $value) {
-  $modulos_adicionados[$value->moduleid] = $value->moduleid;
-}
-
-$sections = array_values($DB->get_records('course_sections', ['course'=>$_GET['courseid']]));
-
-// echo "<pre>";var_dump($course_info->cms);die();
-
-foreach ($course_info->cms as $cmid => $cm) {
-  // echo "<pre>"; echo json_encode((array)$cm);die();
-  //  echo "<pre>";var_dump($cm);die();
-  $module = new stdClass();
-  $module->cmid = $cm->id;
-  $module->name = $cm->name;
-  $module->ja_adicionado = in_array($cm->id, $modulos_adicionados);
-  // echo "<pre>";var_dump($cm->section); echo "</pre>";
-  $section_infos[$sections[$cm->section]->id]->cms[] = $module; // Não funciona como esperado
-}
-
-$section_infos = array_values($section_infos);
-
-// echo "<pre>";var_dump($cm);die();
-// echo "<pre>";var_dump($section_infos[14]);die();
-
-// $modulos = array_values($DB->get_records('course_modules', ['course'=>$COURSE->id]));
-// visibleoncoursepage
-// completion
-// visible
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+  
+  $rows = array_values($DB->get_records_sql('
+    SELECT   moduleid
+    FROM     mdl_suapattendance_componente c 
+    INNER JOIN mdl_suapattendance_aula a ON (c.aulaid=a.id);
+  ', ['courseid'=>$COURSE->id]));
 
-  $cms = $section_infos[$_GET['sectionid']]->cms;
+  $modulos_adicionados = [];
+  foreach ($rows as $key => $value) {
+    $modulos_adicionados[$value->moduleid] = $value->moduleid;
+  }
+
+  $cms = [];
+  $i = 0;
+  foreach ($course_info->cms as $cmid => $cm) {
+    if ($cm->get_section_info()->id == $_GET['sectionid']) {
+      $cms[$i] = new stdClass();
+      $cms[$i]->cmid = $cm->id;
+      $cms[$i]->name = $cm->name;
+      $cms[$i]->ja_adicionado = in_array($cmid, $modulos_adicionados);
+      $i++;
+    }
+  }
+
   $componentes = array_values($DB->get_records('suapattendance_componente', ['aulaid'=>$_GET['aulaid']]));
   
   foreach ($cms as $cm => $value) {
