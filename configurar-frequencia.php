@@ -27,14 +27,20 @@ $aulas = array_values($DB->get_records_sql("
   FROM mdl_suapattendance_aula a 
       INNER JOIN mdl_course_sections s ON (s.id = a.sectionid) 
         WHERE s.course = ?
-        ORDER BY a.etapa
+        ORDER BY s.section
 ", [$COURSE->id]));
 
 foreach ($aulas as $aula) {
   $aula->data_inicio = date('d/m/Y', $aula->data_inicio);
   $aula->data_fim = date('d/m/Y', $aula->data_fim);
-  // $section = $DB->get_record('course_sections', ['id' => $aula->sectionid]);
-  // $aula->sectionname = $section->name;
+  $section = $DB->get_record('course_sections', ['id' => $aula->sectionid]);
+  if (!is_null($section->name)) {
+    $aula->sectionname = $section->name;
+  } else if ($section->section != 0) {
+    $aula->sectionname = "Tópico $section->section";
+  } else {
+    $aula->sectionname = "Apresentação";
+  }
 }
 
 $templatecontext = [

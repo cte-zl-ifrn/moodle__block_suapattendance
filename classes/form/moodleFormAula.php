@@ -40,17 +40,15 @@ class moodleFormAula extends moodleform {
 
         $ifGet = isset($_GET['courseid']) ? ['course'=>$_GET['courseid']] : [];
 
-        $options = array_values($DB->get_records('course_sections', $ifGet));
+        $options = array_values($DB->get_records('course_sections', $ifGet, 'section'));
 
         // Se a seção não tiver nome, coloca o nome manualmente.
-        $i = 0;
         foreach ($options as $option => $value) {
             if($value->section == 0 && is_null($value->name)) {
                 $value->name = "Apresentação";
             } else if (is_null($value->name)) {
-                 $value->name = "Topic $i";
+                $value->name = "Tópico $value->section";
             }
-            $i++;
             $optionsInterface[$value->id] = $value->name;
         }
 
