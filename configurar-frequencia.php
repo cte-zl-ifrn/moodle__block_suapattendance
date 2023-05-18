@@ -33,6 +33,7 @@ $aulas = array_values($DB->get_records_sql("
 foreach ($aulas as $aula) {
   $aula->data_inicio = date('d/m/Y', $aula->data_inicio);
   $aula->data_fim = date('d/m/Y', $aula->data_fim);
+  $aula->componentes = $DB->get_records('suapattendance_componente', ['aulaid' => $aula->id]);
   $section = $DB->get_record('course_sections', ['id' => $aula->sectionid]);
   if (!is_null($section->name)) {
     $aula->sectionname = $section->name;
@@ -42,6 +43,23 @@ foreach ($aulas as $aula) {
     $aula->sectionname = "Apresentação";
   }
 }
+
+foreach ($aulas as $aula) {
+  foreach ($aula->componentes as $componente) {
+    foreach ($course_info->cms as $cm) {
+      if(intval($componente->moduleid) == intval($cm->id)) {
+        $componente->name = $cm->name;
+      }
+    }
+  }
+  $aula->componentes = array_values($aula->componentes);
+}
+
+// $test = array_values($aulas[3]->componentes);
+
+// $aulas[3]->componentes = $test;
+
+// // echo "<pre>"; var_dump($aulas);die();
 
 $templatecontext = [
   'course_url' => "{$CFG->wwwroot}/course/view.php?id={$COURSE->id}",
