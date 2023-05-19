@@ -18,14 +18,15 @@
                 <p><span class="h4">Hora aula: </span>{{quantidade}}</p>
                 <p><span class="h4">Seção: </span>{{sectionname}}</p>
                 <p><span class="h4">Conteúdo: </span>{{{conteudo}}}</p>
-                <a class='btn btn-primary' href="componente.php?courseid={{course.id}}&sectionid={{sectionid}}&aulaid={{id}}">Editar Componentes</a>
+                <p><span class="h4">Componentes: </span></p>
                 {{#componentes}}
                     <div class="card-header border border-second mt-2 align-items-center" id="componente{{id}}">
                         <h5 class="mb-0 d-flex justify-content-between">
-                            <span class="mt-2">{{name}}</span>
+                            <span class="mt-2">{{name}} - {{quantidade_aulas}}%</span>
                         </h5>
                     </div>
                 {{/componentes}}
+                <a class='btn btn-primary mt-3' href="componente.php?courseid={{course.id}}&sectionid={{sectionid}}&aulaid={{id}}">Editar Componentes</a>
             </div>
         </div>
         {{/aulas}}

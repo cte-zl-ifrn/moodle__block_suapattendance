@@ -55,12 +55,6 @@ foreach ($aulas as $aula) {
   $aula->componentes = array_values($aula->componentes);
 }
 
-// $test = array_values($aulas[3]->componentes);
-
-// $aulas[3]->componentes = $test;
-
-// // echo "<pre>"; var_dump($aulas);die();
-
 $templatecontext = [
   'course_url' => "{$CFG->wwwroot}/course/view.php?id={$COURSE->id}",
   'course' => $COURSE,
