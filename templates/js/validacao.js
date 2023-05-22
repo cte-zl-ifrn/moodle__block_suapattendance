@@ -10,10 +10,10 @@ camposNumericos.forEach(campo => {
     });
     if (soma !== 100) {
         submit.disabled = true;
-        document.getElementById('aviso').textContent = 'Soma do percentual de presença precisa resultar em 100'; // não funciona como deveria
+        document.getElementById('aviso').textContent = 'Soma do percentual de presença precisa resultar em 100';
     } else {
         submit.disabled = false;
-        document.getElementById('aviso').textContent = ''; // também não funciona como deveria
+        document.getElementById('aviso').textContent = '';
     }
   });
 });
