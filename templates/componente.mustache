@@ -13,7 +13,7 @@
                                 <th>Percentual de presença</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="comps">
                     {{#cms}}
                             <tr>
                                 {{#ja_adicionado}}<td><input name="componente-{{cmid}}" type="checkbox" class="checkbox-coluna-1" id="componente-{{cmid}}" checked/>{{name}}</td>{{/ja_adicionado}}
@@ -23,6 +23,7 @@
                                 {{^ja_adicionado}}<td><input name="presenca-{{cmid}}" type="number" class="coluna-2 campo-numerico" id="componente-percentual-presenca-{{cmid}}" min="1" max="100" disabled required/>%</td>{{/ja_adicionado}}
                             </tr>
                     {{/cms}}
+                    {{^cms}}<p>Sem módulos adicionados nesse tópico...</p>{{/cms}}
                         </tbody>
                     </table>
                     <p id="aviso" class="mt-2 text-danger"></p>
