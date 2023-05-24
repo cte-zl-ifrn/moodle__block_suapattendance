@@ -24,23 +24,21 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-function course_deleted_observer(\core\event\course_updated $event) {
+function course_deleted_observer(\core\event\course_deleted $event) {
     global $DB;
     
-    if ($event->is_course_deleted()) {
-        $context = $event->get_context();
-        $courseid = $context->instanceid;
+    $context = $event->get_context();
+    $courseid = $context->instanceid;
+    
+    $aulas = array_values($DB->get_records_sql('
+    SELECT a.id
+    FROM mdl_suapattendance_aula a 
+        INNER JOIN mdl_course_sections s ON (a.sectionid = s.id) WHERE course = ?;
+    ', [$courseid]));
 
-        $aulas = array_values($DB->get_records_sql('
-        SELECT a.id
-        FROM mdl_suapattendance_aula a 
-            INNER JOIN mdl_course_sections s ON (a.sectionid = s.id) WHERE course = ?;
-        ', [$courseid]));
-
-        if ($aulas) {
-            foreach($aulas as $aula) {
-                $DB->delete_records('suapattendance_aula', ['id'=>$aula->id]);
-            }
+    if ($aulas) {
+        foreach($aulas as $aula) {
+            $DB->delete_records('suapattendance_aula', ['id'=>$aula->id]);
         }
     }
 }
@@ -48,15 +46,15 @@ function course_deleted_observer(\core\event\course_updated $event) {
 // Registrar o manipulador de evento para o evento 'course_deleted'
 $observers = [
     [
-        'eventname' => '\core\event\course_updated',
+        'eventname' => '\core\event\course_deleted',
         'callback' => 'course_deleted_observer',
     ],
 ];
 
-foreach ($handlers as $eventname => $callback) {
-    $observers = event_observer::instances();
-    $observers->register($eventname, $callback);
-}
+// foreach ($handlers as $eventname => $callback) {
+//     $observers = event_observer::instances();
+//     $observers->register($eventname, $callback);
+// }
 
 // $eventobservers = \core\event\observer::create_instances($observers);
 // foreach ($eventobservers as $eventobserver) {
@@ -65,7 +63,7 @@ foreach ($handlers as $eventname => $callback) {
 
 
 // Registre os manipuladores de eventos
-// foreach ($observers as $observer) {
-//     $observers = event_observer::instances();
-//     $observers->register($observer['eventname'], $observer['callback']);
-// }
+foreach ($observers as $observer) {
+    $observers = event_observer::instances();
+    $observers->register($observer['eventname'], $observer['callback']);
+}
