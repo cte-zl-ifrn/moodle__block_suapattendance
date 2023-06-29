@@ -27,8 +27,8 @@ $aulas = array_values($DB->get_records_sql("
   FROM mdl_suapattendance_aula a 
       INNER JOIN mdl_course_sections s ON (s.id = a.sectionid) 
         WHERE s.course = ?
-        ORDER BY s.section
-", [$COURSE->id]));
+        ORDER BY s.section",
+  [$COURSE->id]));
 
 foreach ($aulas as $aula) {
   $aula->data_inicio = date('d/m/Y', $aula->data_inicio);
