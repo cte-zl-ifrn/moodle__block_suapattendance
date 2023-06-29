@@ -1,0 +1,21 @@
+<body>
+    <main class="d-flex text-center justify-content-center">
+        <div class="w-50 p-10 p-5">
+            <h1 class="pb-1 text-left">Adicionar Aula</h1>
+            <form method="POST" class="mt-5">
+                <div class="text-left">
+                    <label for="quantidadeAula" class="h5">Quantidade de Aulas: </label><br/>
+                    <input id="quantidadeAula" class="form-control w-75" type="number" name="quantidade" placeholder="Quantidade" value="{{aula.quantidade}}" required><br>
+
+                    <label for="ordemAula" class="h5">Ordem da aula: </label><br/>
+                    <input id="ordemAula" min="1" class="form-control w-75" type="number" name="ordem" placeholder="Ordem" value="{{aula.ordem}}" required><br>
+
+                    <div class="mt-4">
+                        <input type="submit" value="Salvar" class="btn btn-primary">
+                        <a class="btn border border-dark btn-outline-dark" href="/blocks/suapattendance/configurar-frequencia.php?id={{course_id}}">Cancelar</a>
+                    <div>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>

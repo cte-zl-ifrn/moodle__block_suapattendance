@@ -37,6 +37,7 @@ class block_suapattendance extends block_base {
      * @return stdClass The block contents.
      */
     public function get_content() {
+        global $CFG, $COURSE, $USER, $OUTPUT;
         // return "Conteúdo do block";
 
         if ($this->content !== null) {
@@ -56,20 +57,22 @@ class block_suapattendance extends block_base {
         $text = "
             <table style='width: 100%; color: white;' border=1em>
                 <tr>
-                    <td style='background-color: CDEB8B'>&nbsp</td>
-                    <td style='background-color: FFCC99'>&nbsp</td>
-                    <td style='background-color: F8CECC'>&nbsp</td>
-                    <td style='background-color: F8CECC'>&nbsp</td>
-                    <td style='background-color: F8CECC'>&nbsp</td>
-                    <td style='background-color: CDEB8B'>&nbsp</td>
-                    <td style='background-color: FFCC99'>&nbsp</td>
-                    <td style='background-color: FFCC99'>&nbsp</td>
-                    <td style='background-color: F8CECC'>&nbsp</td>
-                    <td style='background-color: F8CECC'>&nbsp</td>
+                    <td style='background-color: #cdeb8b'>&nbsp</td>
+                    <td style='background-color: #ffcc99'>&nbsp</td>
+                    <td style='background-color: #f8cecc'>&nbsp</td>
+                    <td style='background-color: #f8cecc'>&nbsp</td>
+                    <td style='background-color: #f8cecc'>&nbsp</td>
+                    <td style='background-color: #cdeb8b'>&nbsp</td>
+                    <td style='background-color: #ffcc99'>&nbsp</td>
+                    <td style='background-color: #ffcc99'>&nbsp</td>
+                    <td style='background-color: #f8cecc'>&nbsp</td>
+                    <td style='background-color: #f8cecc'>&nbsp</td>
                 </tr>
             </table>
         ";
 
+        $p = false;
+        $q = false;
         $total = 5;
         $falta = 1;
         $presenca = 3;
@@ -77,12 +80,14 @@ class block_suapattendance extends block_base {
         $porcentagem_faltas = $falta / $total * 100;
         if ($this->config != null && property_exists($this->config, 'faltas_ou_presencas')) {
             if ($this->config->faltas_ou_presencas == 'p') {
-
+                
                 switch ($this->config->apresentacao) {
                     case 'p':
+                        $p = true;
                         $text .= "$porcentagem_presencas% de presenças";
                         break;
                     case 'q':
+                        $q = true;
                         $text .= "$presenca presenças de $total";
                         break;
                     default:
@@ -104,10 +109,30 @@ class block_suapattendance extends block_base {
                         break;
                 }
             }
-            $text .= "<div><a class='btn btn-primary' href='{$CFG->wwwroot}/blocks/suapattendance/details.php'>Detalhar</a></div>";
-            
+
+            $text .= "<div>";
+            $coursecontext = context_course::instance($COURSE->id);
+            $text .= "<a class='btn btn-primary' href='{$CFG->wwwroot}/blocks/suapattendance/view.php'>View</a>";
+            $text .= "</div>";
             $this->content->text = $text;
-            //$this->content->text = $OUTPUT->render_from_template('block_suapattendance/interface', ['name' => 'Lorem Ipsum', 'description' => 'Lorel Ipsum too']);
+            
+            $context_student = [
+                'detalhar' => "{$CFG->wwwroot}/blocks/suapattendance/details.php?courseid={$COURSE->id}",
+            ];
+
+            $context_teacher = [
+                'editar' => "{$CFG->wwwroot}/blocks/suapattendance/configurar-frequencia.php?courseid={$COURSE->id}",
+            ];
+
+            // $text .= "<a class='btn btn-primary' href='{$CFG->wwwroot}/blocks/suapattendance/edit.php?id={$COURSE->id}'>Edit</a>";
+            // $this->content->text .= $OUTPUT->render_from_template('block_suapattendance/interface_aluno', ['name' => 'Lorem Ipsum', 'description' => 'Lorel Ipsum too']);
+
+            if (!has_capability('block/suapattendance:addinstance', $coursecontext, $USER->id)) {
+                $this->content->text = $OUTPUT->render_from_template('block_suapattendance/interface_aluno', $context_student);
+            } else {
+                $this->content->text = $OUTPUT->render_from_template('block_suapattendance/interface_professor', $context_teacher);
+            }
+            
         }
 
         return $this->content;

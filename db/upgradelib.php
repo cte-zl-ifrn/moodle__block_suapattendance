@@ -34,64 +34,45 @@ function block_suapattendance_migrate($oldversion) {
     $dbman = $DB->get_manager();
 
     if ($oldversion == 0) {
-        # suapattendance_etapa
-        $table = new xmldb_table("suapattendance_etapa");
-        $table->add_field("id",         XMLDB_TYPE_INTEGER, '10',   XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE,  null, null, null);
-        $table->add_field("courseid",   XMLDB_TYPE_INTEGER, '10',   XMLDB_UNSIGNED, XMLDB_NOTNULL, null,            null, null, null);
-        $table->add_field("nome",       XMLDB_TYPE_CHAR,    '255',  null,           XMLDB_NOTNULL, null,            null, null, null);
-        $table->add_field("ordem",      XMLDB_TYPE_CHAR,    '255',  null,           XMLDB_NOTNULL, null,            null, null, null);
-        $table->add_field("idnumber",   XMLDB_TYPE_INTEGER, '10',   XMLDB_UNSIGNED, XMLDB_NOTNULL, null,            null, null, null);
-
-        $table->add_key("primary",      XMLDB_KEY_PRIMARY,  ["id"],         null,       null);
-        $table->add_key('courseid_fk',  XMLDB_KEY_FOREIGN,  ['courseid'],   'course', ['id']);
-        $status = $dbman->create_table($table);
-
-
-
         # suapattendance_aula
         $table = new xmldb_table("suapattendance_aula");
-        $table->add_field("id",             XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE,  null, null, null);
-        $table->add_field("etapaid",        XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,            null, null, null);
-        $table->add_field("sectionid",      XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,            null, null, null);
-        $table->add_field("quantidade",     XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,            null, null, null);
-        $table->add_field("data_inicio",    XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,            null, null, null);
-        $table->add_field("data_fim",       XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,            null, null, null);
-        $table->add_field("descricao",      XMLDB_TYPE_TEXT,    'medium',   XMLDB_UNSIGNED, null,          null,            null, null, null);
-        $table->add_field("ordem",          XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,            null, null, null);
-        $table->add_field("idnumber",       XMLDB_TYPE_CHAR,    '255',      null,           null,          null,            null, null, null);
+        $table->add_field("id",                     XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE,  null, null, null);
+        $table->add_field("sectionid",              XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,            null, null, null);
+        $table->add_field("etapa",                  XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,            null, null, null);
+        $table->add_field("conteudo",               XMLDB_TYPE_TEXT,    'medium',   XMLDB_UNSIGNED, null,          null,            null, null, null);
+        $table->add_field("quantidade",             XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,            null, null, null);
+        $table->add_field("data_inicio",            XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,            null, null, null);
+        $table->add_field("data_fim",               XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,            null, null, null);
+        $table->add_field("idnumber",               XMLDB_TYPE_CHAR,    '255',      XMLDB_UNSIGNED, null,          null,            null, null, null);
 
-        $table->add_key("primary",      XMLDB_KEY_PRIMARY, ["id"],          null,                   null);
-        $table->add_key("etapaid_fk",   XMLDB_KEY_FOREIGN, ['etapaid'],     'suapattendance_etapa', ['id']);
-        $table->add_key("sectionid_fk", XMLDB_KEY_FOREIGN, ['sectionid'],   'course_sections',      ['id']);
+        $table->add_key("primary",      XMLDB_KEY_PRIMARY, ["id"],    null,               null);
+        $table->add_key("sectionid_fk", XMLDB_KEY_FOREIGN, ['sectionid'],  'course_sections',  ['id']);
         $status = $dbman->create_table($table);
 
-        
-
-        # suapattendance_falta
-        $table = new xmldb_table("suapattendance_falta");
-        $table->add_field("id",                 XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE,    null, null, null);
-        $table->add_field("aulaid",             XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null,              null, null, null);
-        $table->add_field("userid",             XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null,              null, null, null);
-        $table->add_field("quantidade_faltas",  XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null,          null,              null, null, null);
-
-        $table->add_key("primary",   XMLDB_KEY_PRIMARY, ["id"],       null,                   null);
-        $table->add_key("aulaid_fk", XMLDB_KEY_FOREIGN, ['aulaid'],   'suapattendance_aula',  ['id']);
-        $table->add_key("userid_fk", XMLDB_KEY_FOREIGN, ['userid'],   'user',                 ['id']);
-        $status = $dbman->create_table($table);
-        
-    
         # suapattendance_componente
         $table = new xmldb_table("suapattendance_componente");
-        $table->add_field("id",         XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE,    null, null, null);
-        $table->add_field("aulaid",     XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,              null, null, null);
-        $table->add_field("moduleid",   XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,              null, null, null);
-        $table->add_field("ordem",      XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,              null, null, null);
-        $table->add_field("fator",      XMLDB_TYPE_NUMBER,  '10,2',     XMLDB_UNSIGNED, XMLDB_NOTNULL, null,              null, null, null);
-        $table->add_field("idnumber",   XMLDB_TYPE_CHAR,    '255',      null,           null,          null,              null, null, null);
+        $table->add_field("id",               XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE,    null, null, null);
+        $table->add_field("aulaid",           XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,              null, null, null);
+        $table->add_field("moduleid",         XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,              null, null, null);
+        $table->add_field("quantidade_aulas", XMLDB_TYPE_INTEGER, '10',       XMLDB_UNSIGNED, XMLDB_NOTNULL, null,              null, null, null);
+        $table->add_field("idnumber",         XMLDB_TYPE_CHAR,    '255',      XMLDB_UNSIGNED, null,          null,              null, null, null);
 
         $table->add_key("primary",      XMLDB_KEY_PRIMARY, ["id"], null, null);
         $table->add_key("aulaid_fk",    XMLDB_KEY_FOREIGN, ['aulaid'],   'suapattendance_aula', ['id']);
         $table->add_key("moduleid_fk",  XMLDB_KEY_FOREIGN, ['moduleid'], 'course_modules',      ['id']);
+        $status = $dbman->create_table($table);
+
+        # suapattendance_falta
+        $table = new xmldb_table("suapattendance_falta");
+        $table->add_field("id",                 XMLDB_TYPE_INTEGER, '10',   XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE,    null, null, null);
+        $table->add_field("aulaid",             XMLDB_TYPE_INTEGER, '10',   XMLDB_UNSIGNED, XMLDB_NOTNULL, null,              null, null, null);
+        $table->add_field("userid",             XMLDB_TYPE_INTEGER, '10',   XMLDB_UNSIGNED, XMLDB_NOTNULL, null,              null, null, null);
+        $table->add_field("quantidade_faltas",  XMLDB_TYPE_INTEGER, '10',   XMLDB_UNSIGNED, null,          null,              null, null, null);
+        $table->add_field("idnumber",           XMLDB_TYPE_CHAR,    '255',  XMLDB_UNSIGNED, null,          null,              null, null, null);
+
+        $table->add_key("primary",   XMLDB_KEY_PRIMARY, ["id"],       null,                   null);
+        $table->add_key("aulaid_fk", XMLDB_KEY_FOREIGN, ['aulaid'],   'suapattendance_aula',  ['id']);
+        $table->add_key("userid_fk", XMLDB_KEY_FOREIGN, ['userid'],   'user',                 ['id']);
         $status = $dbman->create_table($table);
     }
     return true;

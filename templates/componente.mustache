@@ -1,0 +1,42 @@
+<body>
+    <main class="d-flex justify-content-center">
+        <div id="componentes">
+            <h1 class="mb-3">Objeto de aprendizagem que irá valer presença: </h1>
+            <div class="bg-primary border mr-" style="height: 0.24em; width: 60em"></div>
+            <p class="mt-3" style="font-size: 1.1em"><img src="images/Icon-feather-alert-circle.svg" alt="warning icon"><span class="pl-1">A soma do percentual presenças tem que resultar em 100%</span></p>
+            <div style="font-size: 1.1em" class="m-3">
+                <form method="POST">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Componente</th>
+                                <th>Percentual de presença</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comps">
+                    {{#cms}}
+                            <tr>
+                                {{#ja_adicionado}}<td><input name="componente-{{cmid}}" type="checkbox" class="checkbox-coluna-1" id="componente-{{cmid}}" checked/>{{name}}</td>{{/ja_adicionado}}
+                                {{^ja_adicionado}}<td><input name="componente-{{cmid}}" type="checkbox" class="checkbox-coluna-1" id="componente-{{cmid}}"/>{{name}}</td>{{/ja_adicionado}}
+
+                                {{#ja_adicionado}}<td><input name="presenca-{{cmid}}" type="number" class="coluna-2 campo-numerico" id="componente-percentual-presenca-{{cmid}}" min="1" max="100" value="{{presenca}}" required/>%</td>{{/ja_adicionado}}
+                                {{^ja_adicionado}}<td><input name="presenca-{{cmid}}" type="number" class="coluna-2 campo-numerico" id="componente-percentual-presenca-{{cmid}}" min="1" max="100" disabled required/>%</td>{{/ja_adicionado}}
+                            </tr>
+                    {{/cms}}
+                    {{^cms}}<p>Sem módulos adicionados nesse tópico...</p>{{/cms}}
+                        </tbody>
+                    </table>
+                    <p id="aviso" class="mt-2 text-danger"></p>
+                </div>
+                <div class="d-flex mt-3 align-items-center">
+                    <input type="submit" value="Salvar" id="send" class="btn btn-primary"/>
+                </form>
+                    <form method="POST"><input type="submit" value="Resetar" class="btn btn-outline-primary ml-2 mr-2"/></form>
+                    <a href="configurar-frequencia.php?courseid={{course_id}}" class="d-inline btn btn-outline-danger">Cancelar</a>
+                </div>
+             </div>
+        </div>
+        <script src="templates/js/componente.js"></script>
+        <script src="templates/js/validacao.js"></script>
+    </main>
+</body>
